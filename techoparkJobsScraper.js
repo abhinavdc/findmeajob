@@ -16,7 +16,8 @@ rp({ url, "rejectUnauthorized": false })
         const jobTitles = [];
         const companyNames = [];
         const closingDate = [];
-        const jobLinks = [];
+        const jobUrls = [];
+        const companyUrls = [];
         const allJobEnteries = [];
 
         $('.jobTitleLink', html).each((i, elem) => {
@@ -24,11 +25,14 @@ rp({ url, "rejectUnauthorized": false })
         });
 
         $('.jobTitleLink', html).each((i, elem) => {
-            jobLinks.push($(elem).attr('href'));
+            jobUrls.push($(elem).attr('href'));
         });
-
+        
         $('.companyList > td:nth-child(2) > a', html).each((i, elem) => {
             companyNames.push($(elem).text());
+
+            // remove '/' at the begining of the url
+            companyUrls.push($(elem).attr('href').substring(1));
         });
 
         $('.companyList > td:nth-child(3)', html).each((i, elem) => {
@@ -40,7 +44,8 @@ rp({ url, "rejectUnauthorized": false })
                 jobTitle: jobTitles[i],
                 companyName: companyNames[i],
                 closingDate: closingDate[i],
-                jobLink: jobLinks[i]  
+                jobUrl: jobUrls[i],  
+                companyUrl: companyUrls[i]  
             }
             allJobEnteries.push(entry);
         }
