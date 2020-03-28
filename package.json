@@ -4,14 +4,20 @@
   "description": "Job sites scraping tool",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon -r esm index.js --ignore db.json"
   },
   "author": "Abhinav",
   "license": "ISC",
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
-    "puppeteer": "^2.1.1",
+    "esm": "^3.2.25",
+    "express": "^4.17.1",
+    "lodash": "^4.17.15",
+    "lowdb": "^1.0.0",
     "request": "^2.88.2",
     "request-promise": "^4.2.5"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
   }
 }
