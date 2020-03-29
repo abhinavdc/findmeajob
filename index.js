@@ -1,5 +1,5 @@
 import express from 'express';
-import './cron';
+import './lib/cron';
 
 const app = express();
 
