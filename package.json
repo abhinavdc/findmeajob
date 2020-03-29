@@ -9,13 +9,13 @@
   "author": "Abhinav",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.19.2",
     "cheerio": "^1.0.0-rc.3",
     "esm": "^3.2.25",
     "express": "^4.17.1",
     "lodash": "^4.17.15",
     "lowdb": "^1.0.0",
-    "request": "^2.88.2",
-    "request-promise": "^4.2.5"
+    "node-cron": "^2.0.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"

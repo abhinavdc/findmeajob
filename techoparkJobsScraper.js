@@ -1,33 +1,41 @@
 import { orderBy } from 'lodash';
+import db from './db';
+import axios from 'axios';
 
-const rp = require('request-promise');
 const $ = require('cheerio');
 const baseUrl = 'https://www.technopark.org/';
 const allJobEnteries = [];
 const numberOfEnteriesToFetch = 10;
 
-export async function runCron() {
-  const html = await rp({
-    url: baseUrl + 'job-search',
-    rejectUnauthorized: false
-  });
-  const jobList = parseJobListPage(html);
+export async function getTechnoparkJobs() {
+  try {
+    const html = await getHTML(baseUrl + 'job-search');
 
-  await fetchAndParseJobDetailPage(jobList);
+    if (html) {
+      const jobList = parseJobListPage(html);
 
-  for (let i = 0; i < numberOfEnteriesToFetch; i++) {
-    const entry = {
-      jobId: jobList.jobIds[i],
-      jobTitle: jobList.jobTitles[i],
-      companyName: jobList.companyNames[i],
-      closingDate: jobList.closingDates[i],
-      jobUrl: jobList.jobUrls[i],
-      companyUrl: jobList.companyUrls[i],
-      jobDescription: jobList.jobDescriptions[i]
-    };
-    allJobEnteries.push(entry);
+      await fetchAndParseJobDetailPage(jobList);
+
+      for (let i = 0; i < numberOfEnteriesToFetch; i++) {
+        const entry = {,
+          jobTitle: jobList.jobTitles[i],
+          companyName: jobList.companyNames[i],
+          closingDate: jobList.closingDates[i],
+          jobUrl: jobList.jobUrls[i],
+          companyUrl: jobList.companyUrls[i],
+          jobDescription: jobList.jobDescriptions[i]
+        };
+        allJobEnteries.push(entry);
+      }
+      return orderBy(allJobEnteries, 'jobId', 'desc');
+    } else {
+      console.log('Fetch failed');
+      return [];
+    }
+  } catch (err) {
+    console.log(err);
+    return [];
   }
-  return orderBy(allJobEnteries, 'jobId', 'desc');
 }
 
 async function fetchAndParseJobDetailPage(jobList) {
@@ -53,6 +61,11 @@ async function fetchAndParseJobDetailPage(jobList) {
       console.log(`Scraping ${i + 1}/${numberOfEnteriesToFetch}`);
     }
   );
+}
+
+async function getHTML(url) {
+  const { data: html } = await axios.get(url);
+  return html;
 }
 
 function parseJobListPage(html) {
@@ -209,4 +222,43 @@ async function asyncForEach(array, callback) {
   for (let index = 0; index < array.length; index++) {
     await callback(array[index], index, array);
   }
+}
+
+export function runCron() {
+  getTechnoparkJobs().then(allEntries => {
+    const existingEntries = db
+      .get('tpJobs')
+      .orderBy(['jobId'], ['desc'])
+      .value();
+
+    const lastExistingEntry =
+      existingEntries && existingEntries.length
+        ? existingEntries[0].jobId
+        : null;
+
+    console.log('last entry id', lastExistingEntry);
+
+    console.log(
+      'existing entry',
+      existingEntries.map(x => x.jobId)
+    );
+
+    console.log(
+      'allEntries',
+      allEntries.map(x => x.jobId)
+    );
+
+    const newEntries = lastExistingEntry
+      ? allEntries.filter(x => x.jobId > lastExistingEntry)
+      : allEntries;
+
+    console.log(
+      'new entries',
+      newEntries.map(x => x.jobId)
+    );
+
+    newEntries.push(...existingEntries);
+
+    db.set('tpJobs', newEntries).write();
+  });
 }
