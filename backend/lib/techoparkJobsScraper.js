@@ -5,7 +5,6 @@ import https from 'https';
 import cheerio from 'cheerio';
 
 const baseUrl = 'https://www.technopark.org/';
-const numberOfEnteriesToFetch = 10;
 
 const axiosService = axios.create({
   httpsAgent: new https.Agent({
@@ -23,7 +22,7 @@ export async function getTechnoparkJobs() {
 
       await fetchAndParseJobDetailPage(jobList);
 
-      for (let i = 0; i < numberOfEnteriesToFetch; i++) {
+      for (let i = 0; i < jobList.jobIds.length; i++) {
         const entry = {
           jobId: jobList.jobIds[i],
           jobTitle: jobList.jobTitles[i],
@@ -47,25 +46,22 @@ export async function getTechnoparkJobs() {
 }
 
 async function fetchAndParseJobDetailPage(jobList) {
-  await asyncForEach(
-    jobList.jobUrls.slice(0, numberOfEnteriesToFetch),
-    async (url, i) => {
-      // Fetch Job details
-      const jobDetailPageHtml = await getHTML(baseUrl + url);
+  await asyncForEach(jobList.jobUrls, async (url, i) => {
+    // Fetch Job details
+    const jobDetailPageHtml = await getHTML(baseUrl + url);
 
-      let jobDescription = {};
+    let jobDescription = {};
 
-      // Walking pages have different html structures, hence two different parsing logic is used
-      if (!jobList.jobTitles[i].includes('Walk in')) {
-        jobDescription = parseJobDetailPage(jobDetailPageHtml);
-      } else {
-        jobDescription = parseWalkinJobDetailPage(jobDetailPageHtml);
-      }
-      jobList.jobDescriptions.push(jobDescription);
-      // Show in console the progress of parsing
-      console.log(`Scraping ${i + 1}/${numberOfEnteriesToFetch}`);
+    // Walking pages have different html structures, hence two different parsing logic is used
+    if (!jobList.jobTitles[i].includes('Walk in')) {
+      jobDescription = parseJobDetailPage(jobDetailPageHtml);
+    } else {
+      jobDescription = parseWalkinJobDetailPage(jobDetailPageHtml);
     }
-  );
+    jobList.jobDescriptions.push(jobDescription);
+    // Show in console the progress of parsing
+    console.log(`Scraping ${i + 1}/${jobList.jobUrls.length}`);
+  });
 }
 
 async function getHTML(url) {
