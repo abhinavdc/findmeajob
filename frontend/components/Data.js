@@ -18,7 +18,10 @@ const useStyles = makeStyles({
     padding: 20
   },
   container: {
-    maxHeight: 440
+    maxHeight: '80vh'
+  },
+  row: {
+    cursor: 'pointer'
   }
 });
 
@@ -26,6 +29,9 @@ export default function Data() {
   const scrapeData = useContext(ScrapeContext);
   console.log(scrapeData);
   const classes = useStyles();
+  const rowClick = ({ jobUrl }) => {
+    window.open('https://technopark.org/' + jobUrl, '_blank');
+  };
   return (
     <div>
       <div className={classes.box}>
@@ -45,7 +51,12 @@ export default function Data() {
             </TableHead>
             <TableBody>
               {scrapeData.scrapes.map(row => (
-                <TableRow key={row.jobId}>
+                <TableRow
+                  hover
+                  key={row.jobId}
+                  onClick={() => rowClick(row)}
+                  className={classes.row}
+                >
                   <TableCell component="th" scope="row">
                     {row.jobId}
                   </TableCell>
