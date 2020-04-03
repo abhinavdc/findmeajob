@@ -30,7 +30,7 @@ const Index = () => (
     <div fixed style={style}>
       <Container>
         <Navbar></Navbar>
-        <h1>Find Me A Job</h1>
+        <h1 style={{ color: 'white' }}>Find Me A Job</h1>
         <Subcribe></Subcribe>
         <Data />
       </Container>
