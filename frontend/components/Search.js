@@ -39,7 +39,7 @@ const useStyles = makeStyles({
   },
   formControl: {}
 });
-export default function Subscribe() {
+export default function Search() {
   const classes = useStyles();
   const age = 10;
 

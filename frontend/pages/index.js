@@ -3,7 +3,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Page from '../components/Page';
 import Data from '../components/Data';
 import Navbar from '../components/Navbar';
-import Subcribe from '../components/Subcribe';
+import Search from '../components/Search';
 import Head from 'next/head';
 const style = {
   background: '#457fca' /* fallback for old browsers */,
@@ -31,7 +31,7 @@ const Index = () => (
       <Container>
         <Navbar></Navbar>
         <h1 style={{ color: 'white' }}>Find Me A Job</h1>
-        <Subcribe></Subcribe>
+        <Search></Search>
         <Data />
       </Container>
     </div>
