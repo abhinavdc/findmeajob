@@ -1,38 +1,56 @@
 import Link from 'next/link';
 
 const styles = {
-  ul: {
+  nav: {
     display: 'flex',
     flexDirection: 'row',
-    padding: '5px',
     width: '100%',
-    height: '30px',
-    backgroundColor: 'coral',
-    justifyContent: 'space-around',
-    listStyle: 'none'
+    height: 60,
+    justifyContent: 'flex-end'
   },
   li: {
-    margin: 10
+    minWidth: 120,
+    textAlign: 'center',
+    alignSelf: 'center'
   },
   a: {
-    textDecoration: 'none',
-    color: 'white'
+    textDecoration: 'none'
+  },
+  ul: {
+    listStyle: 'none',
+    display: 'flex'
   }
 };
 
 const Navbar = () => (
-  <ul style={styles.ul}>
-    <li style={styles.li}>
-      <Link href="/">
-        <a style={styles.a}>Home</a>
-      </Link>
-    </li>
-    <li style={styles.li}>
-      <Link href="/about">
-        <a style={styles.a}>Above</a>
-      </Link>
-    </li>
-  </ul>
+  <div style={styles.nav}>
+    <ul style={styles.ul}>
+      <li style={styles.li}>
+        <Link href="/">
+          <a style={styles.a}>Home</a>
+        </Link>
+      </li>
+      <li style={styles.li}>
+        <Link href="/about">
+          <a style={styles.a}>About</a>
+        </Link>
+      </li>
+      <li style={styles.li}>
+        <Link href="/about">
+          <a style={styles.a}>Privacy Policy</a>
+        </Link>
+      </li>
+      <li style={styles.li}>
+        <iframe
+          src="https://ghbtns.com/github-btn.html?user=abhinavdc&repo=findmeajob&type=star&count=true"
+          frameborder="0"
+          scrolling="0"
+          width="120px"
+          height="20px"
+        ></iframe>
+      </li>
+    </ul>
+  </div>
 );
 
 export default Navbar;
