@@ -15,7 +15,7 @@ const useStyles = makeStyles({
     cursor: 'pointer'
   },
   container: {
-    height: '70vh'
+    maxHeight: '80vh'
   }
 });
 

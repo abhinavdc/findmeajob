@@ -13,31 +13,23 @@ import Paper from '@material-ui/core/Paper';
 const useStyles = makeStyles({
   container: {
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     alignItems: 'center',
     margin: '10px 0px',
     minHeight: 80,
     padding: 10
   },
-  asd: {
-    display: 'flex',
-    alignItems: 'center',
-    'flex-flow': 'row wrap',
-    justifyContent: 'center'
-  },
-  form: {
-    display: 'flex',
-    'flex-flow': 'row wrap',
-    justifyContent: 'center'
-  },
   textField: {
     margin: 5,
-    width: 'inherit'
+    width: 'inherit',
+    width: '100%'
   },
   button: {
     padding: 10
   },
-  formControl: {}
+  formcontrol: {
+    width: '40%'
+  }
 });
 export default function Search() {
   const classes = useStyles();
@@ -49,7 +41,7 @@ export default function Search() {
 
   return (
     <Box component={Paper} m={1} className={classes.container}>
-      <FormControl>
+      <FormControl className={classes.formcontrol}>
         <TextField
           className={classes.textField}
           id="job"
@@ -57,8 +49,8 @@ export default function Search() {
           type="search"
         />
       </FormControl>
-      <FormControl>
-        <InputLabel id="demo-simple-select-label">Age</InputLabel>
+      <FormControl className={classes.formcontrol}>
+        <InputLabel id="demo-simple-select-label">Location</InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
