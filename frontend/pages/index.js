@@ -1,7 +1,7 @@
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Page from '../components/Page';
-import Data from '../components/Data';
+import DataTable from '../components/DataTable';
 import Navbar from '../components/Navbar';
 import Search from '../components/Search';
 import Head from 'next/head';
@@ -29,10 +29,10 @@ const Index = () => (
     <CssBaseline></CssBaseline>
     <div fixed style={style}>
       <Container>
-        <Navbar></Navbar>
+        <Navbar />
         <h1 style={{ color: 'white' }}>Find Me A Job</h1>
-        <Search></Search>
-        <Data />
+        <Search />
+        <DataTable />
       </Container>
     </div>
   </Page>

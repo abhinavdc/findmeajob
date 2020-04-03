@@ -19,7 +19,7 @@ const useStyles = makeStyles({
   }
 });
 
-export default function Data() {
+export default function DataTable() {
   const scrapeData = useContext(ScrapeContext);
   console.log(scrapeData);
   const classes = useStyles();
