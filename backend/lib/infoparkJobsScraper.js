@@ -4,7 +4,7 @@ import axios from 'axios';
 import https from 'https';
 import cheerio from 'cheerio';
 
-const baseUrl = 'https://www.technopark.org/';
+const baseUrl = 'http://infopark.in/';
 
 const axiosService = axios.create({
   httpsAgent: new https.Agent({
@@ -12,15 +12,75 @@ const axiosService = axios.create({
   })
 });
 
-export async function getTechnoparkJobs() {
+export async function getInfoparkJobs() {
   const allJobEnteries = [];
   try {
-    const html = await getHTML(baseUrl + 'job-search');
+    const jobList = {
+      jobIds: [],
+      jobTitles: [],
+      companyNames: [],
+      closingDates: [],
+      jobUrls: [],
+      companyUrls: [],
+      companyIds: [],
+      jobDescriptions: []
+    };
 
-    if (html) {
-      const jobList = parseJobListPage(html);
+    const data = await getHTML(baseUrl + 'response.php');
 
-      await fetchAndParseJobDetailPage(jobList);
+    if (data) {
+      const totalRecords = data.iTotalDisplayRecords;
+      let i = 0;
+      while (i < totalRecords) {
+        // Fetch
+        let title = data.aaData[i].jobtitle;
+        let company = data.aaData[i].company;
+        const closingDate = parseDate(data.aaData[i].closingdate);
+
+        // Format
+        let jobTitle = title
+          .substring(title.indexOf('>') + 1, title.indexOf('</'))
+          .replace('<b>', '')
+          .replace('<i>', '');
+
+        let jobUrl = title.substring(
+          title.indexOf("href='") + 6,
+          title.indexOf("'>")
+        );
+
+        let jobId = +title.substring(
+          title.indexOf('reid=') + 5,
+          title.indexOf("'>")
+        );
+
+        let companyUrl = company.substring(
+          company.indexOf("href='") + 6,
+          company.indexOf("'>")
+        );
+
+        let companyName = company.substring(
+          company.indexOf('>') + 1,
+          company.indexOf('</')
+        );
+
+        let companyId = +company.substring(
+          company.indexOf('cid=') + 4,
+          company.indexOf("'>")
+        );
+
+        jobList.jobIds[i] = jobId;
+        jobList.jobTitles[i] = jobTitle;
+        jobList.jobUrls[i] = jobUrl;
+        jobList.companyNames[i] = companyName;
+        jobList.companyUrls[i] = companyUrl;
+        jobList.companyIds[i] = companyId;
+        jobList.closingDates[i] = closingDate;
+        i++;
+      }
+
+      // const jobList = parseJobListPage(data);
+
+      // await fetchAndParseJobDetailPage(jobList);
 
       for (let i = 0; i < jobList.jobIds.length; i++) {
         const entry = {
@@ -30,8 +90,9 @@ export async function getTechnoparkJobs() {
           closingDate: jobList.closingDates[i],
           jobUrl: jobList.jobUrls[i],
           companyUrl: jobList.companyUrls[i],
+          companyId: jobList.companyIds[i],
           jobDescription: jobList.jobDescriptions[i],
-          location: 'Trivandrum'
+          location: 'Kochi'
         };
         allJobEnteries.push(entry);
       }
@@ -65,6 +126,25 @@ async function fetchAndParseJobDetailPage(jobList) {
   });
 }
 
+function parseDate(s) {
+  var months = {
+    jan: 0,
+    feb: 1,
+    mar: 2,
+    apr: 3,
+    may: 4,
+    jun: 5,
+    jul: 6,
+    aug: 7,
+    sep: 8,
+    oct: 9,
+    nov: 10,
+    dec: 11
+  };
+  var p = s.split(' ');
+  return new Date(p[2], months[p[1].toLowerCase()], p[0]);
+}
+
 async function getHTML(url) {
   const { data: html } = await axiosService.get(url);
   return html;
@@ -82,32 +162,33 @@ function parseJobListPage(html) {
   };
   const $ = cheerio.load(html);
   // Parse Job Title, Job Url
-  $('.jobTitleLink', html).each((i, elem) => {
-    jobList.jobTitles.push($(elem).text());
-    jobList.jobUrls.push($(elem).attr('href'));
-    // Get vacancy_id from url
-    jobList.jobIds.push(
-      +$(elem)
-        .attr('href')
-        .split('vacancy_id=')[1]
-    );
+  $('.odd, .even', html).each((i, elem) => {
+    console.log(elem.text());
+    // jobList.jobTitles.push($(elem).text());
+    // jobList.jobUrls.push($(elem).attr('href'));
+    // // Get vacancy_id from url
+    // jobList.jobIds.push(
+    //   +$(elem)
+    //     .attr('href')
+    //     .split('vacancy_id=')[1]
+    // );
   });
   // Parse company name, company url
-  $('.companyList > td:nth-child(2) > a', html).each((i, elem) => {
-    jobList.companyNames.push($(elem).text());
-    // remove '/' at the begining of the url
-    jobList.companyUrls.push(
-      $(elem)
-        .attr('href')
-        .substring(1)
-    );
-  });
+  // $('.companyList > td:nth-child(2) > a', html).each((i, elem) => {
+  //   jobList.companyNames.push($(elem).text());
+  //   // remove '/' at the begining of the url
+  //   jobList.companyUrls.push(
+  //     $(elem)
+  //       .attr('href')
+  //       .substring(1)
+  //   );
+  // });
   // Parse closing date
-  $('.companyList > td:nth-child(3)', html).each((i, elem) => {
-    jobList.closingDates.push(convertDate($(elem).text()));
-  });
+  // $('.companyList > td:nth-child(3)', html).each((i, elem) => {
+  //   jobList.closingDates.push(convertDate($(elem).text()));
+  // });
 
-  return jobList;
+  // return jobList;
 }
 
 function parseJobDetailPage(jobDetailPageHtml) {
@@ -228,10 +309,10 @@ async function asyncForEach(array, callback) {
   }
 }
 
-export function runCron() {
-  getTechnoparkJobs().then(allEntries => {
+export function runCron2() {
+  getInfoparkJobs().then(allEntries => {
     const existingEntries = db
-      .get('tpJobs')
+      .get('ipJobs')
       .orderBy(['jobId'], ['desc'])
       .value();
 
@@ -263,6 +344,6 @@ export function runCron() {
 
     newEntries.push(...existingEntries);
 
-    db.set('tpJobs', newEntries).write();
+    db.set('ipJobs', newEntries).write();
   });
 }

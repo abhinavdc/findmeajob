@@ -4,7 +4,8 @@ import FileSync from 'lowdb/adapters/FileSync';
 const adapter = new FileSync('./lib/db.json');
 const db = low(adapter);
 db.defaults({
-  tpJobs: []
+  tpJobs: [],
+  ipJobs: []
 }).write();
 
 export default db;
