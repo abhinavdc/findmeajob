@@ -1,72 +1,32 @@
-import {
-  TextField,
-  Box,
-  Button,
-  FormControl,
-  makeStyles,
-  InputLabel,
-  Select,
-  MenuItem
-} from '@material-ui/core';
-import Paper from '@material-ui/core/Paper';
-
-const useStyles = makeStyles({
-  container: {
-    display: 'flex',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    margin: '10px 0px',
-    minHeight: 80,
-    padding: 10
-  },
-  textField: {
-    margin: 5,
-    width: 'inherit',
-    width: '100%'
-  },
-  button: {
-    padding: 10
-  },
-  formcontrol: {
-    width: '40%'
-  }
-});
 export default function Search() {
-  const classes = useStyles();
-  const age = 10;
-
-  const handleChange = event => {};
-
   const search = () => {};
 
   return (
-    <Box component={Paper} m={1} className={classes.container}>
-      <FormControl className={classes.formcontrol}>
-        <TextField
-          className={classes.textField}
-          id="job"
-          label="Job Keywords"
-          type="search"
-        />
-      </FormControl>
-      <FormControl className={classes.formcontrol}>
-        <InputLabel id="demo-simple-select-label">Location</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={age}
-          onChange={handleChange}
-        >
-          <MenuItem value={10}>Trivandrum</MenuItem>
-          <MenuItem value={20}>Kochi</MenuItem>
-          <MenuItem value={30}>Calicut</MenuItem>
-        </Select>
-      </FormControl>
-      <div className={classes.button}>
-        <Button variant="contained" onClick={search} color="primary">
-          Search
-        </Button>
-      </div>
-    </Box>
+    <section>
+      <section class="hero is-medium is-info is-bold">
+        <div class="hero-body">
+          <div class="container has-text-centered">
+            <h1 class="title is-size-2">Geek Jobs</h1>
+            <h2 class="subtitle is-size-6">
+              Hotest and latest jobs from Kerala's leading tech-parks
+            </h2>
+            <div class="columns is-centered">
+              <div class="column is-4">
+                <div class="control has-icons-right">
+                  <input
+                    class="input is-medium has-margin-right-7"
+                    type="text"
+                    placeholder="Find latest jobs"
+                  />
+                  <span class="icon is-medium is-right">
+                    <i class="fa fa-search"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
   );
 }
