@@ -473,3 +473,7 @@
 .has-negative-margin-right-7 {
   margin-right: -10px !important;
 }
+
+.is-clickable {
+  cursor: pointer;
+}
