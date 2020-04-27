@@ -11,7 +11,7 @@ export default function DataTable() {
     <section class="section">
       <div class="columns is-multiline container">
         {scrapeData.scrapes.map((row) => (
-          <div class="column is-2">
+          <div class="column is-2" key={row.jobId}>
             <div class="card is-clickable" onClick={() => rowClick(row)}>
               <div class="card-content">
                 <div class="media">
