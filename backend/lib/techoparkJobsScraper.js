@@ -8,8 +8,8 @@ const baseUrl = 'https://www.technopark.org/';
 
 const axiosService = axios.create({
   httpsAgent: new https.Agent({
-    rejectUnauthorized: false
-  })
+    rejectUnauthorized: false,
+  }),
 });
 
 export async function getTechnoparkJobs() {
@@ -31,7 +31,7 @@ export async function getTechnoparkJobs() {
           jobUrl: jobList.jobUrls[i],
           companyUrl: jobList.companyUrls[i],
           jobDescription: jobList.jobDescriptions[i],
-          location: 'Trivandrum'
+          location: 'Trivandrum',
         };
         allJobEnteries.push(entry);
       }
@@ -78,7 +78,7 @@ function parseJobListPage(html) {
     closingDates: [],
     jobUrls: [],
     companyUrls: [],
-    jobDescriptions: []
+    jobDescriptions: [],
   };
   const $ = cheerio.load(html);
   // Parse Job Title, Job Url
@@ -86,21 +86,13 @@ function parseJobListPage(html) {
     jobList.jobTitles.push($(elem).text());
     jobList.jobUrls.push($(elem).attr('href'));
     // Get vacancy_id from url
-    jobList.jobIds.push(
-      +$(elem)
-        .attr('href')
-        .split('vacancy_id=')[1]
-    );
+    jobList.jobIds.push(+$(elem).attr('href').split('vacancy_id=')[1]);
   });
   // Parse company name, company url
   $('.companyList > td:nth-child(2) > a', html).each((i, elem) => {
     jobList.companyNames.push($(elem).text());
     // remove '/' at the begining of the url
-    jobList.companyUrls.push(
-      $(elem)
-        .attr('href')
-        .substring(1)
-    );
+    jobList.companyUrls.push($(elem).attr('href').substring(1));
   });
   // Parse closing date
   $('.companyList > td:nth-child(3)', html).each((i, elem) => {
@@ -114,10 +106,12 @@ function parseJobDetailPage(jobDetailPageHtml) {
   const $ = cheerio.load(jobDetailPageHtml);
   const jobDescription = {
     htmlRaw: $('.col-sm-8', jobDetailPageHtml).html(),
-    postingDate: $(
-      '.arrived.det-text.group-effect1 > div:nth-child(3) > p:nth-child(2)',
-      jobDetailPageHtml
-    ).text(),
+    postingDate: convertDate(
+      $(
+        '.arrived.det-text.group-effect1 > div:nth-child(3) > p:nth-child(2)',
+        jobDetailPageHtml
+      ).text()
+    ),
     contactEmail: $(
       '.arrived.det-text.group-effect1 > div:nth-child(5) > a',
       jobDetailPageHtml
@@ -134,8 +128,8 @@ function parseJobDetailPage(jobDetailPageHtml) {
       .text()
       .replace(/\n\t/g, '')
       .split('•')
-      .map(x => x.trim())
-      .filter(x => x)
+      .map((x) => x.trim())
+      .filter((x) => x)
       .join(),
     preferredSkillsRaw: $(
       '.arrived.det-text.group-effect1 > div:nth-child(9) > :not(.head)',
@@ -149,9 +143,9 @@ function parseJobDetailPage(jobDetailPageHtml) {
       .text()
       .replace(/\n\t/g, '')
       .split('•')
-      .map(x => x.trim())
-      .filter(x => x)
-      .join()
+      .map((x) => x.trim())
+      .filter((x) => x)
+      .join(),
   };
   return jobDescription;
 }
@@ -159,10 +153,12 @@ function parseJobDetailPage(jobDetailPageHtml) {
 function parseWalkinJobDetailPage(jobDetailPageHtml) {
   const $ = cheerio.load(jobDetailPageHtml);
   const jobDescription = {
-    postingDate: $(
-      '.arrived.det-text.group-effect1 > div:nth-child(3) > p:nth-child(2)',
-      jobDetailPageHtml
-    ).text(),
+    postingDate: convertDate(
+      $(
+        '.arrived.det-text.group-effect1 > div:nth-child(3) > p:nth-child(2)',
+        jobDetailPageHtml
+      ).text()
+    ),
     walkinStartDate: $(
       '.arrived.det-text.group-effect1 > div:nth-child(4) > p:nth-child(2)',
       jobDetailPageHtml
@@ -191,8 +187,8 @@ function parseWalkinJobDetailPage(jobDetailPageHtml) {
       .text()
       .replace(/\n\t/g, '')
       .split('•')
-      .map(x => x.trim())
-      .filter(x => x)
+      .map((x) => x.trim())
+      .filter((x) => x)
       .join(),
     preferredSkillsRaw: $(
       '.arrived.det-text.group-effect1 > div:nth-child(11) > :not(.head)',
@@ -206,9 +202,9 @@ function parseWalkinJobDetailPage(jobDetailPageHtml) {
       .text()
       .replace(/\n\t/g, '')
       .split('•')
-      .map(x => x.trim())
-      .filter(x => x)
-      .join()
+      .map((x) => x.trim())
+      .filter((x) => x)
+      .join(),
   };
   return jobDescription;
 }
@@ -229,7 +225,7 @@ async function asyncForEach(array, callback) {
 }
 
 export function runCron() {
-  getTechnoparkJobs().then(allEntries => {
+  getTechnoparkJobs().then((allEntries) => {
     const existingEntries = db
       .get('tpJobs')
       .orderBy(['jobId'], ['desc'])
@@ -244,21 +240,21 @@ export function runCron() {
 
     console.log(
       'existing entry',
-      existingEntries.map(x => x.jobId)
+      existingEntries.map((x) => x.jobId)
     );
 
     console.log(
       'allEntries',
-      allEntries.map(x => x.jobId)
+      allEntries.map((x) => x.jobId)
     );
 
     const newEntries = lastExistingEntry
-      ? allEntries.filter(x => x.jobId > lastExistingEntry)
+      ? allEntries.filter((x) => x.jobId > lastExistingEntry)
       : allEntries;
 
     console.log(
       'new entries',
-      newEntries.map(x => x.jobId)
+      newEntries.map((x) => x.jobId)
     );
 
     newEntries.push(...existingEntries);

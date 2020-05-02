@@ -30,14 +30,12 @@ export default function DataTable() {
                   </div>
                   <div class="column">
                     <span class="is-size-7 is-pulled-right has-text-info">
-                      {formatDistance(
-                        new Date(
-                          `${row.jobDescription.postingDate.split('/')[1]}/
-                          ${row.jobDescription.postingDate.split('/')[0]}/
-                          ${row.jobDescription.postingDate.split('/')[2]}`
-                        ),
-                        new Date()
-                      )}{' '}
+                      {row.jobDescription && row.jobDescription.postingDate
+                        ? formatDistance(
+                            new Date(row.jobDescription.postingDate),
+                            new Date()
+                          )
+                        : 'Few days'}{' '}
                       ago
                     </span>
                   </div>
