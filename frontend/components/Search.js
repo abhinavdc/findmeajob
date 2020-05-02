@@ -1,5 +1,19 @@
+import { debounce } from 'lodash';
+import { useContext } from 'react';
+import { ScrapeContext } from './ScrapeContext';
+
 export default function Search() {
-  const search = () => {};
+  const { fetchWithQuery } = useContext(ScrapeContext);
+  let debouncedFn;
+  const search = (event) => {
+    event.persist();
+    if (!debouncedFn) {
+      debouncedFn = debounce(() => {
+        fetchWithQuery(event.target.value);
+      }, 300);
+    }
+    debouncedFn();
+  };
 
   return (
     <section>
@@ -17,6 +31,7 @@ export default function Search() {
                     class="input is-medium has-margin-right-7"
                     type="text"
                     placeholder="Find latest jobs"
+                    onChange={search}
                   />
                   <span class="icon is-medium is-right">
                     <i class="fa fa-search"></i>
@@ -24,6 +39,7 @@ export default function Search() {
                 </div>
               </div>
             </div>
+            {/* <h1>Set an Alert</h1> */}
           </div>
         </div>
       </section>
