@@ -4,8 +4,15 @@ import { formatDistance } from 'date-fns';
 
 export default function DataTable() {
   const scrapeData = useContext(ScrapeContext);
-  const rowClick = ({ jobUrl }) => {
-    window.open('https://technopark.org/' + jobUrl, '_blank');
+  const rowClick = ({ jobUrl, location }) => {
+    switch (location) {
+      case 'Trivandrum':
+        window.open('https://technopark.org/' + jobUrl, '_blank');
+      case 'Kochi':
+        window.open('http://infopark.in/' + jobUrl, '_blank');
+      case 'Kozhikode':
+        window.open(jobUrl, '_blank');
+    }
   };
   return (
     <section class="section">
