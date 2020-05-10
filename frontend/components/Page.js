@@ -6,15 +6,21 @@ import { ScrapeProvider } from './ScrapeContext';
 function useScrapes() {
   // Intial State inside our hook
   const [scrapes, setScrapes] = useState([]);
+
+  const [pagination, setPagination] = useState({ index: 0, query: '' });
   // fetch function
-  async function fetchScrapes(query) {
+  async function fetchScrapes(query = '', index = 0) {
     const res = await fetch(
       query
-        ? `http://localhost:2093/search-jobs?query=${query}`
-        : `http://localhost:2093/all-jobs`
+        ? `http://localhost:2093/search-jobs?index=${index}&query=${query}`
+        : `http://localhost:2093/all-jobs?index=${index}`
     );
     const data = await res.json();
-    setScrapes(data);
+    if (index !== 0) {
+      setScrapes([...scrapes, ...data]);
+    } else {
+      setScrapes(data);
+    }
   }
 
   async function subscribe(email, query) {
@@ -28,14 +34,27 @@ function useScrapes() {
   }, []);
 
   const fetchWithQuery = useCallback((query) => {
-    fetchScrapes(query);
+    setPagination({ index: 0, query });
+    fetchScrapes(query, 0);
   }, []);
+
+  const fetchMore = useCallback(() => {
+    setPagination({ ...pagination, index: pagination.index + 50 });
+    fetchScrapes(pagination.query, pagination.index + 50);
+  }, [pagination]);
 
   // didMount/Did Update
   useEffect(() => {
     fetchScrapes();
   }, []);
-  return { scrapes, fetchScrapes, fetchWithQuery, setEmailAlert };
+
+  return {
+    scrapes,
+    fetchScrapes,
+    fetchWithQuery,
+    setEmailAlert,
+    fetchMore,
+  };
 }
 
 export default function Page({ children }) {

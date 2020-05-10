@@ -12,11 +12,13 @@ app.get(`/all-jobs`, async (req, res, next) => {
   // get the scrape data
   const { tpJobs, cpJobs, ipJobs } = db.value();
 
-  // respond with json
   const allJobs = [...tpJobs, ...cpJobs, ...ipJobs];
-
+  const index = +req.query.index || 0;
   const sortedList = sortBy(allJobs, ['row.jobDescription.postingDate']);
-  return res.json(sortedList);
+  const slicedList = sortedList.slice(index, index + 50);
+
+  // respond with json
+  return res.json(slicedList);
 });
 
 app.get(`/search-jobs`, async (req, res, next) => {
@@ -29,9 +31,11 @@ app.get(`/search-jobs`, async (req, res, next) => {
     allJobs,
     (row) => row.jobTitle.toLowerCase().indexOf(query) > -1
   );
-
+  const index = +req.query.index || 0;
   const sortedList = sortBy(filteredList, ['row.jobDescription.postingDate']);
-  return res.json(sortedList);
+  const slicedList = sortedList.slice(index, index + 50);
+
+  return res.json(slicedList);
 });
 
 app.get('/subscribe', async (req, res, next) => {

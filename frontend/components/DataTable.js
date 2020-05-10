@@ -3,7 +3,7 @@ import { ScrapeContext } from './ScrapeContext';
 import { formatDistance } from 'date-fns';
 
 export default function DataTable() {
-  const { scrapes } = useContext(ScrapeContext);
+  const { scrapes, fetchMore } = useContext(ScrapeContext);
   const rowClick = ({ jobUrl, location }) => {
     switch (location) {
       case 'Trivandrum':
@@ -51,6 +51,11 @@ export default function DataTable() {
             </div>
           </div>
         ))}
+      </div>
+      <div class="container has-text-centered">
+        <button class="button is-primary" onClick={() => fetchMore()}>
+          Load More
+        </button>
       </div>
     </section>
   );

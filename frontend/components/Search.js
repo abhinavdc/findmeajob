@@ -6,7 +6,7 @@ import Subscribe from './Subscribe';
 export default function Search() {
   const { fetchWithQuery } = useContext(ScrapeContext);
   const [query, setQuery] = useState('');
-  const [modalState, setModal] = useState({ showModal: true });
+  const [modalState, setModal] = useState({ showModal: false });
   let debouncedFn;
   const search = (event) => {
     event.persist();
