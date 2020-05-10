@@ -11,10 +11,14 @@ app.use(cors());
 app.get(`/all-jobs`, async (req, res, next) => {
   // get the scrape data
   const { tpJobs, cpJobs, ipJobs } = db.value();
-
-  const allJobs = [...tpJobs, ...cpJobs, ...ipJobs];
   const index = +req.query.index || 0;
-  const sortedList = sortBy(allJobs, ['row.jobDescription.postingDate']);
+
+  const allJobs = [
+    ...tpJobs.slice(index, index + 50),
+    ...cpJobs.slice(index, index + 50),
+    ...ipJobs.slice(index, index + 50),
+  ];
+  const sortedList = sortBy(allJobs, ['jobDescription.postingDate']).reverse();
   const slicedList = sortedList.slice(index, index + 50);
 
   // respond with json
@@ -24,15 +28,23 @@ app.get(`/all-jobs`, async (req, res, next) => {
 app.get(`/search-jobs`, async (req, res, next) => {
   // get the scrape data
   const { tpJobs, cpJobs, ipJobs } = db.value();
-  const allJobs = [...tpJobs, ...cpJobs, ...ipJobs];
+  const index = +req.query.index || 0;
+  const allJobs = [
+    ...tpJobs.slice(index, index + 50),
+    ...cpJobs.slice(index, index + 50),
+    ...ipJobs.slice(index, index + 50),
+  ];
   const query = req.query.query.toLowerCase();
 
-  const filteredList = filter(
-    allJobs,
-    (row) => row.jobTitle.toLowerCase().indexOf(query) > -1
-  );
-  const index = +req.query.index || 0;
-  const sortedList = sortBy(filteredList, ['row.jobDescription.postingDate']);
+  const filteredList = filter(allJobs, (row) => {
+    return (
+      row.jobTitle.toLowerCase().indexOf(query) > -1 ||
+      row.companyName.toLowerCase().indexOf(query) > -1 ||
+      row.jobDescription.briefDescription.toLowerCase().indexOf(query) > -1 ||
+      row.location.toLowerCase().indexOf(query) > -1
+    );
+  });
+  const sortedList = sortBy(filteredList, ['jobDescription.postingDate']);
   const slicedList = sortedList.slice(index, index + 50);
 
   return res.json(slicedList);
