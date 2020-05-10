@@ -13,11 +13,7 @@ app.get(`/all-jobs`, async (req, res, next) => {
   const { tpJobs, cpJobs, ipJobs } = db.value();
 
   // respond with json
-  const allJobs = [
-    ...tpJobs.slice(0, 20),
-    ...cpJobs.slice(0, 20),
-    ...ipJobs.slice(0, 20),
-  ];
+  const allJobs = [...tpJobs, ...cpJobs, ...ipJobs];
 
   const sortedList = sortBy(allJobs, ['row.jobDescription.postingDate']);
   return res.json(sortedList);
@@ -34,10 +30,15 @@ app.get(`/search-jobs`, async (req, res, next) => {
     (row) => row.jobTitle.toLowerCase().indexOf(query) > -1
   );
 
-  const sortedList = sortBy(filteredList, [
-    'row.jobDescription.postingDate',
-  ]).slice(0, 20);
+  const sortedList = sortBy(filteredList, ['row.jobDescription.postingDate']);
   return res.json(sortedList);
+});
+
+app.get('/subscribe', async (req, res, next) => {
+  db.get('subscribers')
+    .push({ email: req.query.email, query: req.query.query, verified: false })
+    .write();
+  return res.json({ success: true });
 });
 
 app.listen(2093, () => {

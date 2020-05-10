@@ -5,7 +5,9 @@ const adapter = new FileSync('./lib/db.json');
 const db = low(adapter);
 db.defaults({
   tpJobs: [],
-  ipJobs: []
+  ipJobs: [],
+  cpJobs: [],
+  subscribers: [],
 }).write();
 
 export default db;

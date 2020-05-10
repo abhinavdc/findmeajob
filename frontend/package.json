@@ -12,7 +12,6 @@
   "author": "Abhinav",
   "license": "ISC",
   "dependencies": {
-    "@material-ui/core": "^4.9.8",
     "date-fns": "^2.11.1",
     "font-awesome": "^4.7.0",
     "lodash": "^4.17.15",
