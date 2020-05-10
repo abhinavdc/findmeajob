@@ -105,7 +105,6 @@ function parseJobListPage(html) {
 function parseJobDetailPage(jobDetailPageHtml) {
   const $ = cheerio.load(jobDetailPageHtml);
   const jobDescription = {
-    htmlRaw: $('.col-sm-8', jobDetailPageHtml).html(),
     postingDate: convertDate(
       $(
         '.arrived.det-text.group-effect1 > div:nth-child(3) > p:nth-child(2)',
@@ -116,10 +115,6 @@ function parseJobDetailPage(jobDetailPageHtml) {
       '.arrived.det-text.group-effect1 > div:nth-child(5) > a',
       jobDetailPageHtml
     ).text(),
-    briefDescriptionRaw: $(
-      '.arrived.det-text.group-effect1 > div:nth-child(7) > :not(.head)',
-      jobDetailPageHtml
-    ).html(),
     briefDescription: $(
       '.arrived.det-text.group-effect1 > div:nth-child(7) > :not(.head)',
       jobDetailPageHtml
@@ -131,10 +126,6 @@ function parseJobDetailPage(jobDetailPageHtml) {
       .map((x) => x.trim())
       .filter((x) => x)
       .join(),
-    preferredSkillsRaw: $(
-      '.arrived.det-text.group-effect1 > div:nth-child(9) > :not(.head)',
-      jobDetailPageHtml
-    ).text(),
     preferredSkills: $(
       '.arrived.det-text.group-effect1 > div:nth-child(9) > :not(.head)',
       jobDetailPageHtml
@@ -175,10 +166,6 @@ function parseWalkinJobDetailPage(jobDetailPageHtml) {
       '.arrived.det-text.group-effect1 > div:nth-child(7) > a',
       jobDetailPageHtml
     ).text(),
-    briefDescriptionRaw: $(
-      '.arrived.det-text.group-effect1 > div:nth-child(9) > :not(.head)',
-      jobDetailPageHtml
-    ).html(),
     briefDescription: $(
       '.arrived.det-text.group-effect1 > div:nth-child(9) > :not(.head)',
       jobDetailPageHtml
@@ -190,10 +177,6 @@ function parseWalkinJobDetailPage(jobDetailPageHtml) {
       .map((x) => x.trim())
       .filter((x) => x)
       .join(),
-    preferredSkillsRaw: $(
-      '.arrived.det-text.group-effect1 > div:nth-child(11) > :not(.head)',
-      jobDetailPageHtml
-    ).html(),
     preferredSkills: $(
       '.arrived.det-text.group-effect1 > div:nth-child(11) > :not(.head)',
       jobDetailPageHtml

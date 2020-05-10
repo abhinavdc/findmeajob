@@ -94,6 +94,7 @@ function parseJobListPage(html) {
       postingDate: new Date(
         $('a > .meta > .date > time', elem).attr('datetime')
       ),
+      briefDescription: '',
     });
   });
 
