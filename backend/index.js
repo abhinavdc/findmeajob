@@ -44,7 +44,10 @@ app.get(`/search-jobs`, async (req, res, next) => {
       row.location.toLowerCase().indexOf(query) > -1
     );
   });
-  const sortedList = sortBy(filteredList, ['jobDescription.postingDate']);
+
+  const sortedList = sortBy(filteredList, [
+    'jobDescription.postingDate',
+  ]).reverse();
   const slicedList = sortedList.slice(index, index + 50);
 
   return res.json(slicedList);
