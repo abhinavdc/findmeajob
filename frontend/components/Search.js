@@ -1,23 +1,37 @@
 import { debounce } from 'lodash';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { ScrapeContext } from './ScrapeContext';
+import Subscribe from './Subscribe';
 
 export default function Search() {
   const { fetchWithQuery } = useContext(ScrapeContext);
+  const [query, setQuery] = useState('');
+  const [modalState, setModal] = useState({ showModal: true });
   let debouncedFn;
   const search = (event) => {
     event.persist();
     if (!debouncedFn) {
       debouncedFn = debounce(() => {
+        setQuery(event.target.value);
         fetchWithQuery(event.target.value);
       }, 300);
     }
     debouncedFn();
   };
 
+  const setAlert = () => {
+    const newModalState = { showModal: true };
+    setModal(newModalState);
+  };
+
   return (
     <section>
-      <section class="hero is-medium is-info is-bold">
+      <Subscribe
+        showModal={modalState.showModal}
+        updateModalState={setModal}
+        query={query}
+      />
+      <section class="hero is-primary is-bold">
         <div class="hero-body">
           <div class="container has-text-centered">
             <h1 class="title is-size-2">Geek Jobs</h1>
@@ -39,7 +53,16 @@ export default function Search() {
                 </div>
               </div>
             </div>
-            {/* <h1>Set an Alert</h1> */}
+            {query !== '' ? (
+              <p onClick={setAlert} class="is-clickable">
+                Set an Alert
+                <span class="icon">
+                  <i class="fa fa-bell"></i>
+                </span>
+              </p>
+            ) : (
+              <div style={{ 'min-height': '24px' }}></div>
+            )}
           </div>
         </div>
       </section>

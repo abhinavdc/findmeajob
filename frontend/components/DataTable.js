@@ -3,7 +3,7 @@ import { ScrapeContext } from './ScrapeContext';
 import { formatDistance } from 'date-fns';
 
 export default function DataTable() {
-  const scrapeData = useContext(ScrapeContext);
+  const { scrapes } = useContext(ScrapeContext);
   const rowClick = ({ jobUrl, location }) => {
     switch (location) {
       case 'Trivandrum':
@@ -17,7 +17,7 @@ export default function DataTable() {
   return (
     <section class="section">
       <div class="columns is-multiline container">
-        {scrapeData.scrapes.map((row) => (
+        {scrapes.map((row) => (
           <div class="column is-2" key={row.jobId}>
             <div class="card is-clickable" onClick={() => rowClick(row)}>
               <div class="card-content">

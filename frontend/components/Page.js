@@ -17,6 +17,16 @@ function useScrapes() {
     setScrapes(data);
   }
 
+  async function subscribe(email, query) {
+    const res = await fetch(
+      `http://localhost:2093/subscribe?query=${query}&email=${email}`
+    );
+  }
+
+  const setEmailAlert = useCallback(({ query, email }) => {
+    subscribe(email, query);
+  }, []);
+
   const fetchWithQuery = useCallback((query) => {
     fetchScrapes(query);
   }, []);
@@ -25,7 +35,7 @@ function useScrapes() {
   useEffect(() => {
     fetchScrapes();
   }, []);
-  return { scrapes, fetchScrapes, fetchWithQuery };
+  return { scrapes, fetchScrapes, fetchWithQuery, setEmailAlert };
 }
 
 export default function Page({ children }) {
