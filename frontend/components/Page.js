@@ -7,7 +7,10 @@ function useScrapes() {
   // Intial State inside our hook
   const [scrapes, setScrapes] = useState([]);
 
-  const [pagination, setPagination] = useState({ index: 0, query: '' });
+  const [pagination, setPagination] = useState({
+    index: 0,
+    query: '',
+  });
   // fetch function
   async function fetchScrapes(query = '', index = 0) {
     const res = await fetch(
@@ -16,6 +19,7 @@ function useScrapes() {
         : `http://localhost:2093/all-jobs?index=${index}`
     );
     const data = await res.json();
+
     if (index !== 0) {
       setScrapes([...scrapes, ...data]);
     } else {
@@ -33,15 +37,18 @@ function useScrapes() {
     subscribe(email, query);
   }, []);
 
-  const fetchWithQuery = useCallback((query) => {
-    setPagination({ index: 0, query });
-    fetchScrapes(query, 0);
-  }, []);
+  const fetchWithQuery = useCallback(
+    (query) => {
+      setPagination({ index: 0, query });
+      fetchScrapes(query, 0);
+    },
+    [scrapes, pagination]
+  );
 
   const fetchMore = useCallback(() => {
     setPagination({ ...pagination, index: pagination.index + 50 });
     fetchScrapes(pagination.query, pagination.index + 50);
-  }, [pagination]);
+  }, [scrapes, pagination]);
 
   // didMount/Did Update
   useEffect(() => {

@@ -14,7 +14,7 @@ export default function Search() {
       debouncedFn = debounce(() => {
         setQuery(event.target.value);
         fetchWithQuery(event.target.value);
-      }, 300);
+      }, 700);
     }
     debouncedFn();
   };
