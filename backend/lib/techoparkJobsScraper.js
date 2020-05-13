@@ -1,8 +1,11 @@
 import { orderBy } from 'lodash';
-import db from './db';
 import axios from 'axios';
 import https from 'https';
 import cheerio from 'cheerio';
+const MongoClient = require('mongodb').MongoClient;
+
+const connectionString =
+  'mongodb+srv://abhinav:zqR143nfUQfPJzp5@cluster0-cygaf.mongodb.net/test?retryWrites=true&w=majority';
 
 const baseUrl = 'https://www.technopark.org/';
 
@@ -31,6 +34,7 @@ export async function getTechnoparkJobs() {
           jobUrl: jobList.jobUrls[i],
           companyUrl: jobList.companyUrls[i],
           jobDescription: jobList.jobDescriptions[i],
+          parkId: 1,
           location: 'Trivandrum',
         };
         allJobEnteries.push(entry);
@@ -208,40 +212,55 @@ async function asyncForEach(array, callback) {
 }
 
 export function runCron() {
-  getTechnoparkJobs().then((allEntries) => {
-    const existingEntries = db
-      .get('tpJobs')
-      .orderBy(['jobId'], ['desc'])
-      .value();
+  MongoClient.connect(
+    connectionString,
+    {
+      useUnifiedTopology: true,
+    },
+    (err, client) => {
+      if (err) return console.error(err);
+      console.log('TP Cron connected to Database');
+      const dbM = client.db('jobs-db');
+      const jobsCollection = dbM.collection('jobs');
 
-    const lastExistingEntry =
-      existingEntries && existingEntries.length
-        ? existingEntries[0].jobId
-        : null;
+      getTechnoparkJobs().then((fetchedEntries) => {
+        jobsCollection
+          .find({ parkId: 1 })
+          .toArray()
+          .then((data) => {
+            const existingEntries = orderBy(data, ['jobId'], ['desc']);
 
-    console.log('last entry id', lastExistingEntry);
+            const lastExistingEntry =
+              existingEntries && existingEntries.length
+                ? existingEntries[0].jobId
+                : null;
 
-    console.log(
-      'existing entry',
-      existingEntries.map((x) => x.jobId)
-    );
+            console.log('last entry id', lastExistingEntry);
 
-    console.log(
-      'allEntries',
-      allEntries.map((x) => x.jobId)
-    );
+            console.log(
+              'existing entry',
+              existingEntries.map((x) => x.jobId)
+            );
 
-    const newEntries = lastExistingEntry
-      ? allEntries.filter((x) => x.jobId > lastExistingEntry)
-      : allEntries;
+            console.log(
+              'allEntries',
+              fetchedEntries.map((x) => x.jobId)
+            );
 
-    console.log(
-      'new entries',
-      newEntries.map((x) => x.jobId)
-    );
+            const newEntries = lastExistingEntry
+              ? fetchedEntries.filter((x) => x.jobId > lastExistingEntry)
+              : fetchedEntries;
 
-    newEntries.push(...existingEntries);
+            console.log(
+              'new entries',
+              newEntries.map((x) => x.jobId)
+            );
 
-    db.set('tpJobs', newEntries).write();
-  });
+            if (newEntries && newEntries.length) {
+              jobsCollection.insertMany(newEntries);
+            }
+          });
+      });
+    }
+  );
 }

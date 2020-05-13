@@ -1,65 +1,106 @@
 import express from 'express';
 import cors from 'cors';
 import { filter, sortBy } from 'lodash';
-import db from './lib/db';
 import './lib/cron';
+import bodyParser from 'body-parser';
+const MongoClient = require('mongodb').MongoClient;
 
 const app = express();
+const connectionString =
+  'mongodb+srv://abhinav:zqR143nfUQfPJzp5@cluster0-cygaf.mongodb.net/test?retryWrites=true&w=majority';
 
-app.use(cors());
+MongoClient.connect(
+  connectionString,
+  {
+    useUnifiedTopology: true,
+  },
+  (err, client) => {
+    if (err) return console.error(err);
+    console.log('Connected to Database');
+    const db = client.db('jobs-db');
+    const jobsCollection = db.collection('jobs');
+    const subscriberCollection = db.collection('subscribers');
 
-app.get(`/all-jobs`, async (req, res, next) => {
-  // get the scrape data
-  const { tpJobs, cpJobs, ipJobs } = db.value();
-  const index = +req.query.index || 0;
+    app.use(cors());
+    app.use(bodyParser.urlencoded({ extended: true }));
 
-  const allJobs = [
-    ...tpJobs.slice(index, index + 50),
-    ...cpJobs.slice(index, index + 50),
-    ...ipJobs.slice(index, index + 50),
-  ];
-  const sortedList = sortBy(allJobs, ['jobDescription.postingDate']).reverse();
-  const slicedList = sortedList.slice(index, index + 50);
+    app.post('/quotes', (req, res) => {
+      jobsCollection
+        .insertOne(req.body)
+        .then((result) => {
+          console.log(result);
+          res.json(result.ops);
+        })
+        .catch((error) => console.error(error));
+    });
 
-  // respond with json
-  return res.json(slicedList);
-});
+    app.get(`/all-jobs`, async (req, res, next) => {
+      const index = +req.query.index || 0;
 
-app.get(`/search-jobs`, async (req, res, next) => {
-  // get the scrape data
-  const { tpJobs, cpJobs, ipJobs } = db.value();
-  const index = +req.query.index || 0;
-  const allJobs = [
-    ...tpJobs.slice(index, index + 50),
-    ...cpJobs.slice(index, index + 50),
-    ...ipJobs.slice(index, index + 50),
-  ];
-  const query = req.query.query.toLowerCase();
+      // get the scrape data
+      jobsCollection
+        .find()
+        .toArray()
+        .then((allJobs) => {
+          const sortedList = sortBy(allJobs, [
+            'jobDescription.postingDate',
+          ]).reverse();
+          const slicedList = sortedList.slice(index, index + 50);
 
-  const filteredList = filter(allJobs, (row) => {
-    return (
-      row.jobTitle.toLowerCase().indexOf(query) > -1 ||
-      row.companyName.toLowerCase().indexOf(query) > -1 ||
-      row.jobDescription.briefDescription.toLowerCase().indexOf(query) > -1 ||
-      row.location.toLowerCase().indexOf(query) > -1
-    );
-  });
+          // respond with json
+          return res.json(slicedList);
+        });
+    });
 
-  const sortedList = sortBy(filteredList, [
-    'jobDescription.postingDate',
-  ]).reverse();
-  const slicedList = sortedList.slice(index, index + 50);
+    app.get(`/search-jobs`, async (req, res, next) => {
+      console.log(req);
+      const index = +req.query.index || 0;
+      const query = req.query.query.toLowerCase();
 
-  return res.json(slicedList);
-});
+      // get the scrape data
+      jobsCollection
+        .find()
+        .toArray()
+        .then((allJobs) => {
+          let filteredList = [];
+          try {
+            filteredList = filter(allJobs, (row) => {
+              return (
+                row.jobTitle.toLowerCase().indexOf(query) > -1 ||
+                row.companyName.toLowerCase().indexOf(query) > -1 ||
+                row.jobDescription.briefDescription
+                  .toLowerCase()
+                  .indexOf(query) > -1 ||
+                row.location.toLowerCase().indexOf(query) > -1
+              );
+            });
+          } catch (err) {
+            console.log('error filtering in search');
+          }
 
-app.get('/subscribe', async (req, res, next) => {
-  db.get('subscribers')
-    .push({ email: req.query.email, query: req.query.query, verified: false })
-    .write();
-  return res.json({ success: true });
-});
+          const sortedList = sortBy(filteredList, [
+            'jobDescription.postingDate',
+          ]).reverse();
+          const slicedList = sortedList.slice(index, index + 50);
 
-app.listen(2093, () => {
-  console.log(`Example App running on port http://localhost:2093`);
-});
+          return res.json(slicedList);
+        });
+    });
+
+    app.get('/subscribe', async (req, res, next) => {
+      subscriberCollection
+        .insertOne({
+          email: req.query.email,
+          query: req.query.query,
+          verified: false,
+        })
+        .then((x) => {
+          return res.json({ success: true });
+        });
+    });
+
+    app.listen(2093, () => {
+      console.log(`Example App running on port http://localhost:2093`);
+    });
+  }
+);

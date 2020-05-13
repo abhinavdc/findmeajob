@@ -1,8 +1,11 @@
 import { orderBy } from 'lodash';
-import db from './db';
 import axios from 'axios';
 import https from 'https';
 import cheerio from 'cheerio';
+const MongoClient = require('mongodb').MongoClient;
+
+const connectionString =
+  'mongodb+srv://abhinav:zqR143nfUQfPJzp5@cluster0-cygaf.mongodb.net/test?retryWrites=true&w=majority';
 
 const baseUrl = 'http://infopark.in/';
 
@@ -93,6 +96,7 @@ export async function getInfoparkJobs() {
           companyUrl: jobList.companyUrls[i],
           companyId: jobList.companyIds[i],
           jobDescription: jobList.jobDescriptions[i],
+          parkId: 2,
           location: 'Kochi',
         };
         allJobEnteries.push(entry);
@@ -169,32 +173,55 @@ async function asyncForEach(array, callback) {
 }
 
 export function runCron2() {
-  getInfoparkJobs().then((allEntries) => {
-    const existingEntries = db
-      .get('ipJobs')
-      .orderBy(['jobId'], ['desc'])
-      .value();
-    const lastExistingEntry =
-      existingEntries && existingEntries.length
-        ? existingEntries[0].jobId
-        : null;
-    console.log('last entry id', lastExistingEntry);
-    console.log(
-      'existing entry',
-      existingEntries.map((x) => x.jobId)
-    );
-    console.log(
-      'allEntries',
-      allEntries.map((x) => x.jobId)
-    );
-    const newEntries = lastExistingEntry
-      ? allEntries.filter((x) => x.jobId > lastExistingEntry)
-      : allEntries;
-    console.log(
-      'new entries',
-      newEntries.map((x) => x.jobId)
-    );
-    newEntries.push(...existingEntries);
-    db.set('ipJobs', newEntries).write();
-  });
+  MongoClient.connect(
+    connectionString,
+    {
+      useUnifiedTopology: true,
+    },
+    (err, client) => {
+      if (err) return console.error(err);
+      console.log('IP Cron connected to Database');
+      const dbM = client.db('jobs-db');
+      const jobsCollection = dbM.collection('jobs');
+
+      getInfoparkJobs().then((fetchedEntries) => {
+        jobsCollection
+          .find({ parkId: 2 })
+          .toArray()
+          .then((data) => {
+            const existingEntries = orderBy(data, ['jobId'], ['desc']);
+
+            const lastExistingEntry =
+              existingEntries && existingEntries.length
+                ? existingEntries[0].jobId
+                : null;
+
+            console.log('last entry id', lastExistingEntry);
+
+            console.log(
+              'existing entry',
+              existingEntries.map((x) => x.jobId)
+            );
+
+            console.log(
+              'allEntries',
+              fetchedEntries.map((x) => x.jobId)
+            );
+
+            const newEntries = lastExistingEntry
+              ? fetchedEntries.filter((x) => x.jobId > lastExistingEntry)
+              : fetchedEntries;
+
+            console.log(
+              'new entries',
+              newEntries.map((x) => x.jobId)
+            );
+
+            if (newEntries && newEntries.length) {
+              jobsCollection.insertMany(newEntries);
+            }
+          });
+      });
+    }
+  );
 }
