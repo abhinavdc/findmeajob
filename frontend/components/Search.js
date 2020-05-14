@@ -40,7 +40,7 @@ export default function Search() {
             </h2>
             <div class="columns is-centered">
               <div class="column is-4">
-                <div class="control has-icons-right">
+                <div class="control has-icons-right" id="search-bar">
                   <input
                     class="input is-medium has-margin-right-7"
                     type="text"
