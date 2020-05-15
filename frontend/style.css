@@ -516,3 +516,7 @@
   box-shadow: none !important;
   box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.2) !important;
 }
+
+.hero {
+  background: linear-gradient(135deg, #4ac95a 0%, #7db9e8 100%) !important;
+}
