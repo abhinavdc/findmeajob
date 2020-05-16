@@ -33,6 +33,7 @@ export async function getTechnoparkJobs() {
           closingDate: jobList.closingDates[i],
           jobUrl: jobList.jobUrls[i],
           companyUrl: jobList.companyUrls[i],
+          companyLogoUrl: jobList.companyLogoUrls[i],
           jobDescription: jobList.jobDescriptions[i],
           parkId: 1,
           location: 'Trivandrum',
@@ -63,7 +64,9 @@ async function fetchAndParseJobDetailPage(jobList) {
     } else {
       jobDescription = parseWalkinJobDetailPage(jobDetailPageHtml);
     }
-    jobList.jobDescriptions.push(jobDescription);
+    jobList.jobDescriptions.push(jobDescription.jobDescription);
+    jobList.companyLogoUrls.push(jobDescription.companyLogoUrl);
+    jobList.companyUrls.push(jobDescription.companyUrl);
     // Show in console the progress of parsing
     console.log(`Scraping ${i + 1}/${jobList.jobUrls.length}`);
   });
@@ -83,6 +86,7 @@ function parseJobListPage(html) {
     jobUrls: [],
     companyUrls: [],
     jobDescriptions: [],
+    companyLogoUrls: [],
   };
   const $ = cheerio.load(html);
   // Parse Job Title, Job Url
@@ -95,8 +99,6 @@ function parseJobListPage(html) {
   // Parse company name, company url
   $('.companyList > td:nth-child(2) > a', html).each((i, elem) => {
     jobList.companyNames.push($(elem).text());
-    // remove '/' at the begining of the url
-    jobList.companyUrls.push($(elem).attr('href').substring(1));
   });
   // Parse closing date
   $('.companyList > td:nth-child(3)', html).each((i, elem) => {
@@ -142,7 +144,9 @@ function parseJobDetailPage(jobDetailPageHtml) {
       .filter((x) => x)
       .join(),
   };
-  return jobDescription;
+  const companyLogoUrl = $('.owl-carousel > div > img').attr('src');
+  const companyUrl = $('ul.list-sx > li:nth-child(3) > a').attr('href');
+  return { jobDescription, companyLogoUrl, companyUrl };
 }
 
 function parseWalkinJobDetailPage(jobDetailPageHtml) {
@@ -193,7 +197,9 @@ function parseWalkinJobDetailPage(jobDetailPageHtml) {
       .filter((x) => x)
       .join(),
   };
-  return jobDescription;
+  const companyLogoUrl = $('.owl-carousel > div > img').attr('src');
+  const companyUrl = $('ul.list-sx > li:nth-child(3) > a').attr('href');
+  return { jobDescription, companyLogoUrl, companyUrl };
 }
 
 function convertDate(dateString) {
@@ -220,6 +226,8 @@ export function runCron() {
     (err, client) => {
       if (err) return console.error(err);
       console.log('TP Cron connected to Database');
+      const db = client.db('jobs-db');
+      const jobsCollection = db.collection('jobs');
       const dbM = client.db('jobs-db');
       const jobsCollection = dbM.collection('jobs');
 

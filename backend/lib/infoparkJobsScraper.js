@@ -181,8 +181,8 @@ export function runCron2() {
     (err, client) => {
       if (err) return console.error(err);
       console.log('IP Cron connected to Database');
-      const dbM = client.db('jobs-db');
-      const jobsCollection = dbM.collection('jobs');
+      const db = client.db('jobs-db');
+      const jobsCollection = db.collection('jobs');
 
       getInfoparkJobs().then((fetchedEntries) => {
         jobsCollection

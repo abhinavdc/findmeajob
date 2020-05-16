@@ -1,8 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import { filter, sortBy } from 'lodash';
-import './lib/cron';
 import bodyParser from 'body-parser';
+import './lib/cron';
 const MongoClient = require('mongodb').MongoClient;
 
 const app = express();
