@@ -12,12 +12,14 @@ function useScrapes() {
     index: 0,
     query: '',
   });
+
+  const base_url = window.location.origin;
   // fetch function
   async function fetchScrapes(query = '', index = 0) {
     const res = await fetch(
       query
-        ? `http://localhost:${port}/search-jobs?index=${index}&query=${query}`
-        : `http://localhost:${port}/all-jobs?index=${index}`
+        ? `${base_url}:${port}/search-jobs?index=${index}&query=${query}`
+        : `${base_url}:${port}/all-jobs?index=${index}`
     );
     const data = await res.json();
 
@@ -30,7 +32,7 @@ function useScrapes() {
 
   async function subscribe(email, query) {
     const res = await fetch(
-      `http://localhost:${port}/subscribe?query=${query}&email=${email}`
+      `${base_url}:${port}/subscribe?query=${query}&email=${email}`
     );
   }
 
