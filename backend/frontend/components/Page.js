@@ -7,7 +7,7 @@ function useScrapes() {
   // Intial State inside our hook
   const [scrapes, setScrapes] = useState([]);
 
-  const port = process.env.NODE_ENV || 3000;
+  const port = process.env.PORT || 3000;
   const [pagination, setPagination] = useState({
     index: 0,
     query: '',
