@@ -3,6 +3,7 @@ import cors from 'cors';
 import { filter, sortBy } from 'lodash';
 import bodyParser from 'body-parser';
 import './lib/cron';
+import path from 'path';
 const MongoClient = require('mongodb').MongoClient;
 
 const app = express();
@@ -98,6 +99,14 @@ MongoClient.connect(
           return res.json({ success: true });
         });
     });
+
+    if (process.env.NODE_ENV === 'production') {
+      app.use(express.static('../frontend/out'));
+
+      app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, '../frontend/out', 'index.html'));
+      });
+    }
 
     app.listen(2093, () => {
       console.log(`Example App running on port http://localhost:2093`);

@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "next",
-    "start": "next start",
-    "build": "next build"
+    "start": "next start -p $PORT",
+    "build": "next build && next export"
   },
   "author": "Abhinav",
   "license": "ISC",

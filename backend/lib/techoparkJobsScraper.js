@@ -228,8 +228,6 @@ export function runCron() {
       console.log('TP Cron connected to Database');
       const db = client.db('jobs-db');
       const jobsCollection = db.collection('jobs');
-      const dbM = client.db('jobs-db');
-      const jobsCollection = dbM.collection('jobs');
 
       getTechnoparkJobs().then((fetchedEntries) => {
         jobsCollection
