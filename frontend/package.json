@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "next",
-    "start": "next start -p $PORT",
+    "start": "next start",
     "build": "next build && next export"
   },
   "author": "Abhinav",

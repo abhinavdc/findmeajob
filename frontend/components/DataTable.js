@@ -16,11 +16,18 @@ export default function DataTable() {
   };
   return (
     <section class="section">
-      <div class="columns is-multiline container">
+      <div class="columns is-multiline is-variable is-4">
         {scrapes.map((row) => (
           <div class="column is-3" key={row.jobId}>
-            <div class="card is-clickable" onClick={() => rowClick(row)}>
-              <div class="card-image">
+            <div
+              class="card is-clickable"
+              style={{
+                borderRadius: '10px',
+                boxShadow: '0 2.5px 7px 0 #c7ced5',
+              }}
+              onClick={() => rowClick(row)}
+            >
+              {/* <div class="card-image">
                 <figure class="image is-4by3">
                   <img
                     class="has-padding-5"
@@ -28,8 +35,8 @@ export default function DataTable() {
                     alt="Placeholder image"
                   />
                 </figure>
-              </div>
-              <div class="card-content">
+              </div> */}
+              <div class="card-content" style={{ minHeight: '120px' }}>
                 <div class="media">
                   {/* <div class="media-left">
                     <figure class="image is-48x48">
@@ -52,6 +59,9 @@ export default function DataTable() {
                 <div class="card-footer-item columns">
                   <div class="column">
                     <span class="is-size-7 has-text-grey-light has-text-left">
+                      <span class="icon is-medium is-right">
+                        <i class="fas fa-map-marker-alt"></i>
+                      </span>
                       {row.location}
                     </span>
                   </div>
