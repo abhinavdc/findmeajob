@@ -7,6 +7,7 @@ function useScrapes() {
   // Intial State inside our hook
   const [scrapes, setScrapes] = useState([]);
 
+  const port = process.env.NODE_ENV || 3000;
   const [pagination, setPagination] = useState({
     index: 0,
     query: '',
@@ -15,8 +16,8 @@ function useScrapes() {
   async function fetchScrapes(query = '', index = 0) {
     const res = await fetch(
       query
-        ? `http://localhost:2093/search-jobs?index=${index}&query=${query}`
-        : `http://localhost:2093/all-jobs?index=${index}`
+        ? `http://localhost:${port}/search-jobs?index=${index}&query=${query}`
+        : `http://localhost:${port}/all-jobs?index=${index}`
     );
     const data = await res.json();
 
@@ -29,7 +30,7 @@ function useScrapes() {
 
   async function subscribe(email, query) {
     const res = await fetch(
-      `http://localhost:2093/subscribe?query=${query}&email=${email}`
+      `http://localhost:${port}/subscribe?query=${query}&email=${email}`
     );
   }
 
