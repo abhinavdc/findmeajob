@@ -100,13 +100,13 @@ MongoClient.connect(
         });
     });
 
-    // if (process.env.NODE_ENV === 'production') {
-    app.use(express.static('../frontend/out'));
+    if (process.env.NODE_ENV === 'production') {
+      app.use(express.static('../frontend/out'));
 
-    app.get('*', (req, res) => {
-      res.sendFile(path.resolve(__dirname, '../frontend/out', 'index.html'));
-    });
-    // }
+      app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, '../frontend/out', 'index.html'));
+      });
+    }
 
     app.listen(2093, () => {
       console.log(`Example App running on port http://localhost:2093`);
