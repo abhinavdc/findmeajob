@@ -1,5 +1,5 @@
 backend/node_modules/
 backend/lib/db.json
-backend/frontend/node_modules/
-backend/frontend/.next
-backend/frontend/out
+backend/client/node_modules/
+backend/client/.next
+backend/client/out

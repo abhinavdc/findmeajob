@@ -101,10 +101,10 @@ MongoClient.connect(
     });
 
     if (process.env.NODE_ENV === 'production') {
-      app.use(express.static('frontend/out'));
+      app.use(express.static('client/out'));
 
       app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, 'frontend/out', 'index.html'));
+        res.sendFile(path.resolve(__dirname, 'client/out', 'index.html'));
       });
     }
 
