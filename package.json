@@ -4,13 +4,14 @@
   "description": "Job sites scraping tool",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon -r esm index.js --ignore db.json",
+    "dev": "nodemon -r esm dotenv/config index.js",
     "start": "node -r esm index.js",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "author": "Abhinav",
   "license": "ISC",
   "dependencies": {
+    "@sendgrid/mail": "^7.2.1",
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",
     "cheerio": "^1.0.0-rc.3",
@@ -23,6 +24,7 @@
     "node-cron": "^2.0.3"
   },
   "devDependencies": {
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.2",
+    "dotenv": "^8.2.0"
   }
 }

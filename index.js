@@ -4,7 +4,11 @@ import { filter, sortBy } from 'lodash';
 import bodyParser from 'body-parser';
 import './lib/cron';
 import path from 'path';
+
 const MongoClient = require('mongodb').MongoClient;
+const sgMail = require('@sendgrid/mail');
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const app = express();
 const connectionString =
@@ -25,16 +29,6 @@ MongoClient.connect(
     app.use(cors());
     app.use(bodyParser.urlencoded({ extended: true }));
 
-    app.post('/quotes', (req, res) => {
-      jobsCollection
-        .insertOne(req.body)
-        .then((result) => {
-          console.log(result);
-          res.json(result.ops);
-        })
-        .catch((error) => console.error(error));
-    });
-
     app.get(`/all-jobs`, async (req, res, next) => {
       const index = +req.query.index || 0;
 
@@ -54,7 +48,6 @@ MongoClient.connect(
     });
 
     app.get(`/search-jobs`, async (req, res, next) => {
-      console.log(req);
       const index = +req.query.index || 0;
       const query = req.query.query.toLowerCase();
 
@@ -96,6 +89,22 @@ MongoClient.connect(
           verified: false,
         })
         .then((x) => {
+          const msg = {
+            to: req.query.email,
+            from: 'abhinavdinesh95@gmail.com',
+            subject: 'Great jobs coming your way!',
+            text: `All done! We will alert you when someone posts a job related to '${req.query.query}'`,
+            html: `All done! We will alert you when someone posts a job related to <strong>${req.query.query}</strong>`,
+          };
+
+          sgMail
+            .send(msg)
+            .then(() => {
+              console.log('Message sent');
+            })
+            .catch((error) => {
+              console.log(error.response.body);
+            });
           return res.json({ success: true });
         });
     });
@@ -108,7 +117,7 @@ MongoClient.connect(
       });
     }
 
-    const PORT = process.env.PORT || 3000;
+    const PORT = process.env.PORT || 2000;
     app.listen(PORT, () => {
       console.log(`Our app is running on port ${PORT}`);
     });

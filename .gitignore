@@ -3,3 +3,4 @@ lib/db.json
 client/node_modules/
 client/.next
 client/out
+.env

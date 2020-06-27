@@ -12,12 +12,15 @@ function useScrapes() {
     query: '',
   });
 
+  let url =
+    process.env.NODE_ENV === 'development' ? 'http://localhost:2000/' : '';
+
   // fetch function
   async function fetchScrapes(query = '', index = 0) {
     const res = await fetch(
       query
-        ? `search-jobs?index=${index}&query=${query}`
-        : `all-jobs?index=${index}`
+        ? `${url}search-jobs?index=${index}&query=${query}`
+        : `${url}all-jobs?index=${index}`
     );
     const data = await res.json();
 
@@ -29,7 +32,7 @@ function useScrapes() {
   }
 
   async function subscribe(email, query) {
-    const res = await fetch(`subscribe?query=${query}&email=${email}`);
+    const res = await fetch(`${url}subscribe?query=${query}&email=${email}`);
   }
 
   const setEmailAlert = useCallback(({ query, email }) => {
@@ -67,7 +70,7 @@ export default function Page({ children }) {
   const hookInfo = useScrapes();
   return (
     <ScrapeProvider value={hookInfo}>
-      <div className="page">{children}</div>
+      <div className='page'>{children}</div>
     </ScrapeProvider>
   );
 }
