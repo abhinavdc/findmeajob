@@ -117,7 +117,7 @@ MongoClient.connect(
       subscriberCollection
         .findOneAndUpdate(
           { token: req.query.token, verified: false },
-          { verified: true }
+          { $set: { verified: true } }
         )
         .then(
           () => {
