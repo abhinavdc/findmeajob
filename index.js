@@ -114,7 +114,7 @@ MongoClient.connect(
     });
 
     app.get('/verify-email', async (req, res, next) => {
-      jobsCollection
+      subscriberCollection
         .findOneAndUpdate(
           { token: req.query.token, verified: false },
           { verified: true }
