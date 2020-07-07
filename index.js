@@ -83,22 +83,25 @@ MongoClient.connect(
     });
 
     app.get('/subscribe', async (req, res, next) => {
-      const token = crypto.randomBytes(64).toString('hex');
+      const confirmToken = crypto.randomBytes(64).toString('hex');
+      const unsubscribeToken = crypto.randomBytes(64).toString('hex');
 
       subscriberCollection
         .insertOne({
           email: req.query.email,
           query: req.query.query,
           verified: false,
-          token: token,
+          token: confirmToken,
+          unsubscribeToken: unsubscribeToken,
+          unsubscribed: false
         })
         .then((x) => {
           const msg = {
             to: req.query.email,
             from: 'abhinavdinesh95@gmail.com',
             subject: 'Just one more step!',
-            text: `Great jobs coming your way! Just click on this link to confirm - https://immense-basin-85534.herokuapp.com/verify-email?token=${token}`,
-            html: `Great jobs coming your way! Just click on this link to confirm - <a href="https://immense-basin-85534.herokuapp.com/verify-email?token=${token}"> Confirm </a>`,
+            text: `Great jobs coming your way! Just click on this link to confirm - https://immense-basin-85534.herokuapp.com/verify-email?token=${confirmToken}`,
+            html: `Great jobs coming your way! Just click on this link to confirm - <a href="https://immense-basin-85534.herokuapp.com/verify-email?token=${confirmToken}"> Confirm </a>`,
           };
 
           sgMail
@@ -118,6 +121,21 @@ MongoClient.connect(
         .findOneAndUpdate(
           { token: req.query.token, verified: false },
           { $set: { verified: true } }
+        )
+        .then(
+          () => {
+            return res.json({ success: true });
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+
+    app.get('/unsubscribe', async (req, res, next) => {
+      subscriberCollection
+        .findOneAndUpdate(
+          { unsubscribeToken: req.query.token },
+          { $set: { unsubscribed: true } }
         )
         .then(
           () => {
