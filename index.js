@@ -4,6 +4,7 @@ import { filter, sortBy } from 'lodash';
 import bodyParser from 'body-parser';
 import './lib/cron';
 import path from 'path';
+import crypto from 'crypto';
 
 const MongoClient = require('mongodb').MongoClient;
 const sgMail = require('@sendgrid/mail');
@@ -82,19 +83,22 @@ MongoClient.connect(
     });
 
     app.get('/subscribe', async (req, res, next) => {
+      const token = crypto.randomBytes(64).toString('hex');
+
       subscriberCollection
         .insertOne({
           email: req.query.email,
           query: req.query.query,
           verified: false,
+          token: token,
         })
         .then((x) => {
           const msg = {
             to: req.query.email,
             from: 'abhinavdinesh95@gmail.com',
-            subject: 'Great jobs coming your way!',
-            text: `All done! We will alert you when someone posts a job related to '${req.query.query}'`,
-            html: `All done! We will alert you when someone posts a job related to <strong>${req.query.query}</strong>`,
+            subject: 'Just one more step!',
+            text: `Great jobs coming your way! Just click on this link to confirm - https://immense-basin-85534.herokuapp.com/verify-email?token=${token}`,
+            html: `Great jobs coming your way! Just click on this link to confirm - <a href="https://immense-basin-85534.herokuapp.com/verify-email?token=${token}"> Confirm </a>`,
           };
 
           sgMail
@@ -107,6 +111,22 @@ MongoClient.connect(
             });
           return res.json({ success: true });
         });
+    });
+
+    app.get('/verify-email', async (req, res, next) => {
+      jobsCollection
+        .findOneAndUpdate(
+          { token: req.query.token, verified: false },
+          { verified: true }
+        )
+        .then(
+          () => {
+            return res.json({ success: true });
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
     });
 
     if (process.env.NODE_ENV === 'production') {
