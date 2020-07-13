@@ -88,12 +88,13 @@ MongoClient.connect(
 
       subscriberCollection
         .insertOne({
+          _id: new mongodb.ObjectID(),
           email: req.query.email,
           query: req.query.query,
           verified: false,
           token: confirmToken,
           unsubscribeToken: unsubscribeToken,
-          unsubscribed: false
+          unsubscribed: false,
         })
         .then((x) => {
           const msg = {
@@ -130,6 +131,7 @@ MongoClient.connect(
             console.log(error);
           }
         );
+    });
 
     app.get('/unsubscribe', async (req, res, next) => {
       subscriberCollection
