@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { filter, sortBy } from 'lodash';
+import { buildConfirmationMail } from './mailBuilder';
 import bodyParser from 'body-parser';
 import './lib/cron';
 import path from 'path';
@@ -109,8 +110,8 @@ MongoClient.connect(
             to: req.query.email,
             from: 'abhinavdinesh95@gmail.com',
             subject: 'Just one more step!',
-            text: `Great jobs coming your way! Just click on this link to confirm - https://immense-basin-85534.herokuapp.com/verify-email?token=${confirmToken}`,
-            html: `Great jobs coming your way! Just click on this link to confirm - <a href="https://immense-basin-85534.herokuapp.com/verify-email?token=${confirmToken}"> Confirm </a>`,
+            text: `Just click on the link to start getting jobs tailored for you right in your inbox. Don't miss out on oppurtunities ever again - https://immense-basin-85534.herokuapp.com/verify-email?token=${confirmToken}`,
+            html: buildConfirmationMail(confirmToken),
           };
 
           sgMail
