@@ -35,7 +35,7 @@ export default function Search() {
       <section class="hero is-primary is-bold">
         <div class="hero-body">
           <div class="container has-text-centered">
-            <h1 class="title is-size-2">Geek Jobs</h1>
+            <h1 class="title is-size-2">find me a job</h1>
             <h2 class="subtitle is-size-6">
               Hotest and latest jobs from Kerala's leading tech-parks
             </h2>
@@ -45,7 +45,7 @@ export default function Search() {
                   <input
                     class="input is-medium has-margin-right-7"
                     type="text"
-                    placeholder="Find latest jobs"
+                    placeholder="Search"
                     onChange={search}
                   />
                   <span class="icon is-medium is-right">

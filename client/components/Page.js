@@ -5,7 +5,7 @@ import { ScrapeProvider } from './ScrapeContext';
 // Custom Hook!
 function useScrapes() {
   // Intial State inside our hook
-  const [scrapes, setScrapes] = useState([]);
+  const [scrapes, setScrapes] = useState(null);
 
   const [subscriberCount, setSubscriberCount] = useState(null);
 
@@ -49,6 +49,7 @@ function useScrapes() {
 
   const fetchWithQuery = useCallback(
     (query) => {
+      setScrapes(null);
       setPagination({ index: 0, query });
       fetchScrapes(query, 0);
     },
