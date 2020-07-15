@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 import { ScrapeContext } from './ScrapeContext';
+import { validate } from 'email-validator';
 
 export default function Subscribe(props) {
   const { setEmailAlert } = useContext(ScrapeContext);
@@ -11,6 +12,7 @@ export default function Subscribe(props) {
   });
 
   const [email, setEmail] = useState('');
+  const [emailInvalid, setEmailInvalid] = useState(false);
   const [subscribed, setSubcribed] = useState(false);
 
   useEffect(() => {
@@ -22,13 +24,19 @@ export default function Subscribe(props) {
   };
 
   const setAlert = () => {
-    setSubcribed(true);
-    setEmailAlert({ query: state.query, email });
+    if (validate(email)) {
+      setEmailInvalid(false);
+      setSubcribed(true);
+      setEmailAlert({ query: state.query, email });
+    } else {
+      setEmailInvalid(true);
+    }
   };
 
   const close = () => {
     setSubcribed(false);
     setEmail('');
+    setEmailInvalid(false);
     state.updateModalState({ showModal: false });
   };
 
@@ -45,10 +53,18 @@ export default function Subscribe(props) {
               {subscribed === false ? (
                 <span>
                   Receive an alert when there's a new job matching '
-                  {state.query}'
+                  {state.query}' 😎
+                  {emailInvalid ? (
+                    <p class="email-invalid-msg">
+                      {' '}
+                      Please enter a valid email{' '}
+                    </p>
+                  ) : (
+                    ''
+                  )}
                 </span>
               ) : (
-                <p>Awesome! We have send a verification mail</p>
+                <p>Awesome! We have send a verification mail 🙂</p>
               )}
             </div>
             <div class="columns has-margin-7">
@@ -56,7 +72,7 @@ export default function Subscribe(props) {
                 <div class="control has-icons-right">
                   <input
                     class="input"
-                    type="text"
+                    type="email"
                     placeholder="Enter your email"
                     value={email}
                     onChange={handleChange}
@@ -77,7 +93,7 @@ export default function Subscribe(props) {
             </div>
             <div class="has-text-centered">
               <span class="subtitle is-7">
-                Join other {state.subscriberCount} subscribers
+                Join other {state.subscriberCount} subscribers 👍
               </span>
             </div>
           </div>

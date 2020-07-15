@@ -535,6 +535,7 @@
   width: 60px;
   height: 60px;
 }
+
 .lds-hourglass:after {
   content: ' ';
   display: block;
@@ -547,6 +548,7 @@
   border-color: #7db9e8 transparent #4ac95a transparent;
   animation: lds-hourglass 1.2s infinite;
 }
+
 @keyframes lds-hourglass {
   0% {
     transform: rotate(0);
@@ -559,4 +561,10 @@
   100% {
     transform: rotate(1800deg);
   }
+}
+
+.email-invalid-msg {
+  color: red;
+  font-style: italic;
+  font-size: 0.8rem;
 }
