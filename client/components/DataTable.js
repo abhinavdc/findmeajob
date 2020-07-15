@@ -18,7 +18,7 @@ export default function DataTable() {
     <section class="section">
       <div class="columns is-multiline is-variable is-4">
         {scrapes.map((row) => (
-          <div class="column is-3" key={row.jobId}>
+          <div class="column is-3" key={row._id}>
             <div
               class="card is-clickable"
               style={{
