@@ -4,7 +4,7 @@ import { ScrapeContext } from './ScrapeContext';
 import Subscribe from './Subscribe';
 
 export default function Search() {
-  const { fetchWithQuery } = useContext(ScrapeContext);
+  const { fetchWithQuery, subscriberCount } = useContext(ScrapeContext);
   const [query, setQuery] = useState('');
   const [modalState, setModal] = useState({ showModal: false });
   let debouncedFn;
@@ -30,6 +30,7 @@ export default function Search() {
         showModal={modalState.showModal}
         updateModalState={setModal}
         query={query}
+        subscriberCount={subscriberCount}
       />
       <section class="hero is-primary is-bold">
         <div class="hero-body">

@@ -82,6 +82,15 @@ MongoClient.connect(
         });
     });
 
+    app.get('/get-subscriber-count', async (req, res, next) => {
+      subscriberCollection
+        .find({})
+        .toArray()
+        .then((x) => {
+          return res.json({ count: x.length });
+        });
+    });
+
     app.get('/subscribe', async (req, res, next) => {
       const confirmToken = crypto.randomBytes(64).toString('hex');
       const unsubscribeToken = crypto.randomBytes(64).toString('hex');

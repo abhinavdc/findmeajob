@@ -7,6 +7,8 @@ function useScrapes() {
   // Intial State inside our hook
   const [scrapes, setScrapes] = useState([]);
 
+  const [subscriberCount, setSubscriberCount] = useState(null);
+
   const [pagination, setPagination] = useState({
     index: 0,
     query: '',
@@ -35,6 +37,12 @@ function useScrapes() {
     const res = await fetch(`${url}subscribe?query=${query}&email=${email}`);
   }
 
+  async function getSubscriberCount() {
+    const res = await fetch(`${url}get-subscriber-count`);
+    const data = await res.json();
+    setSubscriberCount(data.count);
+  }
+
   const setEmailAlert = useCallback(({ query, email }) => {
     subscribe(email, query);
   }, []);
@@ -55,10 +63,12 @@ function useScrapes() {
   // didMount/Did Update
   useEffect(() => {
     fetchScrapes();
+    getSubscriberCount();
   }, []);
 
   return {
     scrapes,
+    subscriberCount,
     fetchScrapes,
     fetchWithQuery,
     setEmailAlert,
@@ -70,7 +80,7 @@ export default function Page({ children }) {
   const hookInfo = useScrapes();
   return (
     <ScrapeProvider value={hookInfo}>
-      <div className='page'>{children}</div>
+      <div className="page">{children}</div>
     </ScrapeProvider>
   );
 }

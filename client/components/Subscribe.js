@@ -7,6 +7,7 @@ export default function Subscribe(props) {
     showModal: props.showModal,
     setModalState: props.setModalState,
     query: props.query,
+    subscriberCount: props.subscriberCount,
   });
 
   const [email, setEmail] = useState('');
@@ -75,7 +76,9 @@ export default function Subscribe(props) {
               </div>
             </div>
             <div class="has-text-centered">
-              <span class="subtitle is-7">Join other 124 subscribers</span>
+              <span class="subtitle is-7">
+                Join other {state.subscriberCount} subscribers
+              </span>
             </div>
           </div>
         </section>
