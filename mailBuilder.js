@@ -348,7 +348,7 @@ export function buildConfirmationMail(token) {
                         <h2 style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;font-family: 'Lato', sans-serif;color: #000;margin-top: 0;font-weight: 400;font-size: 40px;margin-bottom: 0;line-height: 1.4;">Please verify your email</h2>
                         <h3 style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;font-family: 'Lato', sans-serif;color: #000000;margin-top: 0;font-weight: 300;font-size: 24px;">Don't miss out on oppurtunities ever again.</h3>
                         <p style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-                          <a href="https://immense-basin-85534.herokuapp.com//verify-email?token=${token}" class="btn btn-primary" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;text-decoration: none;color: #ffffff;padding: 10px 15px;display: inline-block;border-radius: 5px;background: #30e3ca;">Yes! Find Me Jobs
+                          <a href="https://immense-basin-85534.herokuapp.com/verify-email?token=${token}" class="btn btn-primary" style="-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;text-decoration: none;color: #ffffff;padding: 10px 15px;display: inline-block;border-radius: 5px;background: #30e3ca;">Yes! Find Me Jobs
                         </a></p>
                       </div>
                     </td>
