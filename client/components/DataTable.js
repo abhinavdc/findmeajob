@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { ScrapeContext } from './ScrapeContext';
-import { formatDistance } from 'date-fns';
+import { format } from 'date-fns';
+import { motion } from 'framer-motion';
 
 export default function DataTable() {
   const { scrapes, fetchMore } = useContext(ScrapeContext);
@@ -16,71 +17,45 @@ export default function DataTable() {
   };
   return (
     <section class="section">
-      <div class="columns is-multiline is-variable is-4">
+      <div class="container job-list">
         {scrapes && scrapes.length
           ? scrapes.map((row) => (
-              <div class="column is-3" key={row._id}>
-                <div
-                  class="card is-clickable"
-                  style={{
-                    borderRadius: '10px',
-                    boxShadow: '0 2.5px 7px 0 #c7ced5',
-                  }}
-                  onClick={() => rowClick(row)}
-                >
-                  {/* <div class="card-image">
-                <figure class="image is-4by3">
-                  <img
-                    class="has-padding-5"
-                    src={row.companyLogoUrl}
-                    alt="Placeholder image"
-                  />
-                </figure>
-              </div> */}
-                  <div class="card-content" style={{ minHeight: '120px' }}>
-                    <div class="media">
-                      {/* <div class="media-left">
-                    <figure class="image is-48x48">
-                      <img
-                        src={
-                          row.companyLogoUrl ||
-                          'https://bulma.io/images/placeholders/96x96.png'
-                        }
-                        alt="Placeholder image"
-                      />
-                    </figure>
-                  </div> */}
-                      <div class="media-content">
-                        <p class="subtitle is-7">{row.companyName}</p>
-                      </div>
-                    </div>
-                    <p class="is-text-centered">{row.jobTitle}</p>
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.99 }}
+                class="box"
+                key={row._id}
+              >
+                <div class="columns is-vcentered">
+                  <div
+                    class="column is-three-quarters is-clickable"
+                    onClick={() => rowClick(row)}
+                  >
+                    <p class="is-size-7 has-margin-bottom-7">
+                      {row.companyName}
+                    </p>
+                    <p class="is-size-5 is-capitalized job-title has-margin-bottom-7">
+                      {row.jobTitle}
+                    </p>
+                    <span class="is-size-7">
+                      <span class="icon is-small is-right">
+                        <i class="fas fa-map-marker-alt"></i>
+                      </span>
+                      {row.location}
+                    </span>
                   </div>
-                  <footer class="card-footer">
-                    <div class="card-footer-item columns">
-                      <div class="column">
-                        <span class="is-size-7 has-text-grey-light has-text-left">
-                          <span class="icon is-medium is-right">
-                            <i class="fas fa-map-marker-alt"></i>
-                          </span>
-                          {row.location}
-                        </span>
-                      </div>
-                      <div class="column">
-                        <span class="is-size-7 is-pulled-right has-text-info">
-                          {row.jobDescription && row.jobDescription.postingDate
-                            ? formatDistance(
-                                new Date(row.jobDescription.postingDate),
-                                new Date()
-                              )
-                            : 'Few days'}{' '}
-                          ago
-                        </span>
-                      </div>
-                    </div>
-                  </footer>
+                  <div class="column job-date">
+                    <span class="is-size-6">
+                      {row.jobDescription && row.jobDescription.postingDate
+                        ? format(
+                            new Date(row.jobDescription.postingDate),
+                            'MMM dd'
+                          )
+                        : ''}
+                    </span>
+                  </div>
                 </div>
-              </div>
+              </motion.div>
             ))
           : ''}
       </div>
@@ -91,7 +66,7 @@ export default function DataTable() {
       ) : scrapes && scrapes.length === 0 ? (
         <div class="loader-container">We're sorry! No matching results 🙁</div>
       ) : (
-        <div class="container has-text-centered">
+        <div class="container has-text-centered has-margin-top-4">
           <button class="button is-primary" onClick={() => fetchMore()}>
             Load More
           </button>

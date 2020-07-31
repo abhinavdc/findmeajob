@@ -568,3 +568,19 @@
   font-style: italic;
   font-size: 0.8rem;
 }
+
+.job-list {
+  max-width: 800px;
+}
+
+.job-title {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.job-date {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

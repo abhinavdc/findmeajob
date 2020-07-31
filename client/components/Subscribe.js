@@ -43,13 +43,13 @@ export default function Subscribe(props) {
   return (
     <div class={state.showModal === true ? 'is-active modal' : 'modal'}>
       <div class="modal-background" onClick={close}></div>
-      <div class="modal-card has-padding-7">
+      <div class="modal-card p-1">
         <section class="modal-card-body is-rounded-4">
           <div class="container">
             <div class="title is-4 has-text-centered">
               <h3>Don't miss out!</h3>
             </div>
-            <div class="has-margin-6 has-text-centered">
+            <div class="m-2 has-text-centered">
               {subscribed === false ? (
                 <span>
                   Receive an alert when there's a new job matching '
@@ -67,7 +67,7 @@ export default function Subscribe(props) {
                 <p>Awesome! We have send a verification mail 🙂</p>
               )}
             </div>
-            <div class="columns has-margin-7">
+            <div class="columns m-2">
               <div class="column is-9">
                 <div class="control has-icons-right">
                   <input
