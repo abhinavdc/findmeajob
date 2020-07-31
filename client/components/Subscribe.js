@@ -53,6 +53,7 @@ export default function Subscribe(props) {
     },
     visible: {
       scale: 1,
+      y: '-100px',
       opacity: 1,
       transition: { delay: 0.2 },
     },
@@ -85,7 +86,7 @@ export default function Subscribe(props) {
                 <div class="title is-4 has-text-centered">
                   <h3>Don't miss out!</h3>
                 </div>
-                <div class="m-2 has-text-centered">
+                <div class="has-margin-7 has-text-centered">
                   {subscribed === false ? (
                     <span>
                       Receive an alert when there's a new job matching '
@@ -103,7 +104,7 @@ export default function Subscribe(props) {
                     <p>Awesome! We have send a verification mail 🙂</p>
                   )}
                 </div>
-                <div class="columns m-2">
+                <div class="columns has-margin-7">
                   <div class="column is-9">
                     <div class="control has-icons-right">
                       <input
