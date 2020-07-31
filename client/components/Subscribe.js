@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
 import { ScrapeContext } from './ScrapeContext';
 import { validate } from 'email-validator';
+import { AnimatePresence, motion } from 'framer-motion';
 
 export default function Subscribe(props) {
   const { setEmailAlert } = useContext(ScrapeContext);
@@ -40,70 +41,109 @@ export default function Subscribe(props) {
     state.updateModalState({ showModal: false });
   };
 
+  const backdrop = {
+    visible: { opacity: 1 },
+    hidden: { opacity: 0 },
+  };
+
+  const modal = {
+    hidden: {
+      scale: 0,
+      opacity: 0,
+    },
+    visible: {
+      scale: 1,
+      opacity: 1,
+      transition: { delay: 0.2 },
+    },
+    exit: {
+      opacity: 0,
+    },
+  };
+
   return (
-    <div class={state.showModal === true ? 'is-active modal' : 'modal'}>
-      <div class="modal-background" onClick={close}></div>
-      <div class="modal-card p-1">
-        <section class="modal-card-body is-rounded-4">
-          <div class="container">
-            <div class="title is-4 has-text-centered">
-              <h3>Don't miss out!</h3>
-            </div>
-            <div class="m-2 has-text-centered">
-              {subscribed === false ? (
-                <span>
-                  Receive an alert when there's a new job matching '
-                  {state.query}' 😎
-                  {emailInvalid ? (
-                    <p class="email-invalid-msg">
-                      {' '}
-                      Please enter a valid email{' '}
-                    </p>
+    <AnimatePresence exitBeforeEnter>
+      {state.showModal && (
+        <div class={state.showModal === true ? 'is-active modal' : 'modal'}>
+          <motion.div
+            class="modal-background"
+            variants={backdrop}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            onClick={close}
+          ></motion.div>
+          <motion.div
+            variants={modal}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            class="modal-card p-1"
+          >
+            <section class="modal-card-body is-rounded-4">
+              <div class="container">
+                <div class="title is-4 has-text-centered">
+                  <h3>Don't miss out!</h3>
+                </div>
+                <div class="m-2 has-text-centered">
+                  {subscribed === false ? (
+                    <span>
+                      Receive an alert when there's a new job matching '
+                      {state.query}' 😎
+                      {emailInvalid ? (
+                        <p class="email-invalid-msg">
+                          {' '}
+                          Please enter a valid email{' '}
+                        </p>
+                      ) : (
+                        ''
+                      )}
+                    </span>
                   ) : (
-                    ''
+                    <p>Awesome! We have send a verification mail 🙂</p>
                   )}
-                </span>
-              ) : (
-                <p>Awesome! We have send a verification mail 🙂</p>
-              )}
-            </div>
-            <div class="columns m-2">
-              <div class="column is-9">
-                <div class="control has-icons-right">
-                  <input
-                    class="input"
-                    type="email"
-                    placeholder="Enter your email"
-                    value={email}
-                    onChange={handleChange}
-                  />
-                  <span class="icon is-medium is-right">
-                    <i class="fa fa-envelope-o"></i>
+                </div>
+                <div class="columns m-2">
+                  <div class="column is-9">
+                    <div class="control has-icons-right">
+                      <input
+                        class="input"
+                        type="email"
+                        placeholder="Enter your email"
+                        value={email}
+                        onChange={handleChange}
+                      />
+                      <span class="icon is-medium is-right">
+                        <i class="fa fa-envelope-o"></i>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="column is-3">
+                    <button
+                      class="button is-primary is-fullwidth"
+                      onClick={setAlert}
+                    >
+                      Set Alert
+                    </button>
+                  </div>
+                </div>
+                <div class="has-text-centered">
+                  <span class="subtitle is-7">
+                    Join other {state.subscriberCount} subscribers 👍
                   </span>
                 </div>
               </div>
-              <div class="column is-3">
-                <button
-                  class="button is-primary is-fullwidth"
-                  onClick={setAlert}
-                >
-                  Set Alert
-                </button>
-              </div>
-            </div>
-            <div class="has-text-centered">
-              <span class="subtitle is-7">
-                Join other {state.subscriberCount} subscribers 👍
-              </span>
-            </div>
-          </div>
-        </section>
-      </div>
-      <button
-        class="modal-close is-large"
-        aria-label="close"
-        onClick={close}
-      ></button>
-    </div>
+            </section>
+          </motion.div>
+          <button
+            class="modal-close is-large"
+            aria-label="close"
+            onClick={close}
+          ></button>
+        </div>
+      )}
+    </AnimatePresence>
+    // <div class={state.showModal === true ? 'is-active modal' : 'modal'}>
+    // </div>
   );
 }
