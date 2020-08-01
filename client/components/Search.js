@@ -55,7 +55,7 @@ export default function Search() {
               </div>
             </div>
             {query !== '' ? (
-              <p onClick={setAlert} class="is-clickable">
+              <p onClick={setAlert} class="is-clickable noselect">
                 Set an Alert
                 <span class="icon">
                   <i class="fa fa-bell"></i>
