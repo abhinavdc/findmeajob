@@ -37,7 +37,7 @@ export default function Search() {
           <div class="container has-text-centered">
             <h1 class="title is-size-2">find me a job</h1>
             <h2 class="subtitle is-size-6">
-              Hottest and latest jobs from Kerala's leading tech-parks
+              Hotest and latest jobs from Kerala's leading tech-parks
             </h2>
             <div class="columns is-centered">
               <div class="column is-4">

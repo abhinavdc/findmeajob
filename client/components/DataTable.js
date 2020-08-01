@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 import { motion } from 'framer-motion';
 
 export default function DataTable() {
-  const { scrapes, fetchMore } = useContext(ScrapeContext);
+  const { scrapes, fetchMore, loading } = useContext(ScrapeContext);
   const rowClick = ({ jobUrl, location }) => {
     switch (location) {
       case 'Trivandrum':
@@ -67,7 +67,10 @@ export default function DataTable() {
         <div class="loader-container">We're sorry! No matching results 🙁</div>
       ) : (
         <div class="container has-text-centered has-margin-top-4">
-          <button class="button is-primary" onClick={() => fetchMore()}>
+          <button
+            class={`button is-primary ${loading ? 'is-loading' : ''}`}
+            onClick={() => fetchMore()}
+          >
             Load More
           </button>
         </div>

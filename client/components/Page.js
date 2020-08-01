@@ -4,7 +4,7 @@ import { ScrapeProvider } from './ScrapeContext';
 
 // Custom Hook!
 function useScrapes() {
-  // Intial State inside our hook
+  const [loading, setLoading] = useState(false);
   const [scrapes, setScrapes] = useState(null);
 
   const [subscriberCount, setSubscriberCount] = useState(null);
@@ -19,6 +19,7 @@ function useScrapes() {
 
   // fetch function
   async function fetchScrapes(query = '', index = 0) {
+    setLoading(true);
     const res = await fetch(
       query
         ? `${url}search-jobs?index=${index}&query=${query}`
@@ -26,6 +27,7 @@ function useScrapes() {
     );
     const data = await res.json();
 
+    setLoading(false);
     if (index !== 0) {
       setScrapes([...scrapes, ...data]);
     } else {
@@ -74,6 +76,7 @@ function useScrapes() {
     fetchWithQuery,
     setEmailAlert,
     fetchMore,
+    loading,
   };
 }
 
