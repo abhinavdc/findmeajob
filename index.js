@@ -149,7 +149,7 @@ MongoClient.connect(
         )
         .then(
           () => {
-            return res.json({ success: true });
+            return res.render('Unsubscribed Successfully!');
           },
           (error) => {
             console.log(error);
