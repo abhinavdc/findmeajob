@@ -13,6 +13,7 @@ const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const app = express();
+app.set('view engine', 'jade');
 const connectionString = process.env.CONN_STRING;
 
 MongoClient.connect(
@@ -133,7 +134,7 @@ MongoClient.connect(
         )
         .then(
           () => {
-            return res.json({ success: true });
+            return res.redirect('/about');
           },
           (error) => {
             console.log(error);
