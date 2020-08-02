@@ -13,8 +13,7 @@ const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const app = express();
-const connectionString =
-  'mongodb+srv://abhinav:zqR143nfUQfPJzp5@cluster0-cygaf.mongodb.net/test?retryWrites=true&w=majority';
+const connectionString = process.env.CONN_STRING;
 
 MongoClient.connect(
   connectionString,
