@@ -44,7 +44,7 @@ export default function DataTable() {
                       {row.location}
                     </span>
                   </div>
-                  <div class="column job-date">
+                  <div class="column centered">
                     <span class="is-size-6">
                       {row.jobDescription && row.jobDescription.postingDate
                         ? format(

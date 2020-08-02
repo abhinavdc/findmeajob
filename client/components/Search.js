@@ -2,6 +2,7 @@ import { debounce } from 'lodash';
 import { useContext, useState } from 'react';
 import { ScrapeContext } from './ScrapeContext';
 import Subscribe from './Subscribe';
+import GitHubButton from 'react-github-button';
 
 export default function Search() {
   const { fetchWithQuery, subscriberCount } = useContext(ScrapeContext);
@@ -54,16 +55,24 @@ export default function Search() {
                 </div>
               </div>
             </div>
-            {query !== '' ? (
-              <p onClick={setAlert} class="is-clickable noselect">
-                Set an Alert
-                <span class="icon">
-                  <i class="fa fa-bell"></i>
-                </span>
-              </p>
-            ) : (
-              <div style={{ 'min-height': '24px' }}></div>
-            )}
+            <div style={{ 'min-height': '24px' }}>
+              {query !== '' ? (
+                <p onClick={setAlert} class="is-clickable noselect centered">
+                  Set an Alert
+                  <span class="icon">
+                    <i class="fa fa-bell"></i>
+                  </span>
+                </p>
+              ) : (
+                <div class="centered">
+                  <GitHubButton
+                    type="stargazers"
+                    namespace="abhinavdc"
+                    repo="trivia-app"
+                  />
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </section>
