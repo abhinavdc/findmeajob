@@ -2,6 +2,7 @@ import { debounce } from 'lodash';
 import { useContext, useState } from 'react';
 import { ScrapeContext } from './ScrapeContext';
 import Subscribe from './Subscribe';
+import Logo from './Logo';
 
 export default function Search() {
   const { fetchWithQuery, subscriberCount } = useContext(ScrapeContext);
@@ -35,7 +36,7 @@ export default function Search() {
       <section class="hero is-danger is-medium is-bold">
         <div class="hero-body">
           <div class="container has-text-centered">
-            <h1 class="title is-size-2">find me a job</h1>
+            <Logo></Logo>
             <h2 class="subtitle is-size-6">
               Hottest and latest jobs from Kerala's leading tech-parks
             </h2>
