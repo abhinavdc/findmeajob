@@ -21,7 +21,8 @@
     "lodash": "^4.17.15",
     "lowdb": "^1.0.0",
     "mongodb": "^3.5.7",
-    "node-cron": "^2.0.3"
+    "node-cron": "^2.0.3",
+    "pug": "^3.0.0"
   },
   "devDependencies": {
     "dotenv": "^8.2.0",
