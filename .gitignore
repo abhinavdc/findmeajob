@@ -4,3 +4,4 @@ client/node_modules/
 client/.next
 client/out
 .env
+.DS_Store
