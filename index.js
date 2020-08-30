@@ -95,6 +95,15 @@ MongoClient.connect(
         });
     });
 
+    app.get('/get-subscriber-counts', async (req, res, next) => {
+      subscriberCollection
+        .find({})
+        .toArray()
+        .then((x) => {
+          return res.render('success-page.pug', { message: 'asdasd' });
+        });
+    });
+
     app.get('/subscribe', async (req, res, next) => {
       const confirmToken = crypto.randomBytes(64).toString('hex');
       const unsubscribeToken = crypto.randomBytes(64).toString('hex');
@@ -140,7 +149,9 @@ MongoClient.connect(
         )
         .then(
           () => {
-            return res.redirect('/about');
+            return res.render('views/success-page.pug', {
+              message: 'Email verified successfully',
+            });
           },
           (error) => {
             console.log(error);
@@ -156,7 +167,9 @@ MongoClient.connect(
         )
         .then(
           () => {
-            return res.render('Unsubscribed Successfully!');
+            return res.render('views/success-page.pug', {
+              message: 'Unsubscribed successfully',
+            });
           },
           (error) => {
             console.log(error);
