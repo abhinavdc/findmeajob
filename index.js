@@ -1,11 +1,11 @@
 import express from 'express';
 import cors from 'cors';
 import { filter, sortBy } from 'lodash';
-import { buildConfirmationMail } from './mailBuilder';
 import bodyParser from 'body-parser';
 import './lib/cron';
 import path from 'path';
 import crypto from 'crypto';
+import pug from 'pug';
 
 const MongoClient = require('mongodb').MongoClient;
 const sgMail = require('@sendgrid/mail');
@@ -13,7 +13,10 @@ const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const app = express();
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
+app.use(express.static('public'));
+app.set('views', path.join(__dirname, 'views'));
+
 const connectionString = process.env.CONN_STRING;
 
 MongoClient.connect(
@@ -106,12 +109,15 @@ MongoClient.connect(
           unsubscribed: false,
         })
         .then((x) => {
+          const html = pug.renderFile('views/verification-email.pug', {
+            token: confirmToken,
+          });
           const msg = {
             to: req.query.email,
             from: 'abhinavdinesh95@gmail.com',
-            subject: 'Just one more step!',
+            subject: 'Confirm Email | Just one more step and your all set!',
             text: `Just click on the link to start getting jobs tailored for you right in your inbox. Don't miss out on oppurtunities ever again - https://immense-basin-85534.herokuapp.com/verify-email?token=${confirmToken}`,
-            html: buildConfirmationMail(confirmToken),
+            html,
           };
 
           sgMail
