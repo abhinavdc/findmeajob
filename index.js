@@ -95,15 +95,6 @@ MongoClient.connect(
         });
     });
 
-    app.get('/get-subscriber-counts', async (req, res, next) => {
-      subscriberCollection
-        .find({})
-        .toArray()
-        .then((x) => {
-          return res.render('success-page.pug', { message: 'asdasd' });
-        });
-    });
-
     app.get('/subscribe', async (req, res, next) => {
       const confirmToken = crypto.randomBytes(64).toString('hex');
       const unsubscribeToken = crypto.randomBytes(64).toString('hex');
