@@ -53,7 +53,7 @@ export default function Subscribe(props) {
     },
     visible: {
       scale: 1,
-      y: '-100px',
+      y: '-50px',
       opacity: 1,
       transition: { delay: 0.2 },
     },
@@ -82,7 +82,7 @@ export default function Subscribe(props) {
             class="modal-card p-1"
           >
             <section class="modal-card-body is-rounded-4">
-              <div class="container">
+              <div class="container has-margin-7">
                 <div class="title is-4 has-text-centered">
                   <h3>Don't miss out!</h3>
                 </div>
@@ -121,7 +121,7 @@ export default function Subscribe(props) {
                   </div>
                   <div class="column is-3">
                     <button
-                      class="button is-primary is-fullwidth"
+                      class="button is-danger is-fullwidth"
                       onClick={setAlert}
                     >
                       Set Alert
