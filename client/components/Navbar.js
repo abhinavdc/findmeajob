@@ -30,7 +30,7 @@ const Navbar = () => (
         <GitHubButton
           type="stargazers"
           namespace="abhinavdc"
-          repo="trivia-app"
+          repo="findmeajob"
         />
       </li>
     </ul>
