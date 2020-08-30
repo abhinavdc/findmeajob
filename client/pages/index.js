@@ -6,7 +6,7 @@ import Search from '../components/Search';
 export default function Index() {
   return (
     <Page>
-      {/* <Navbar /> */}
+      <Navbar />
       <Search />
       <DataTable />
     </Page>
