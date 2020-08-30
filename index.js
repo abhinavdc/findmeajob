@@ -123,8 +123,11 @@ MongoClient.connect(
           });
           const msg = {
             to: req.query.email,
-            from: 'abhinavdinesh95@gmail.com',
-            subject: 'Confirm Email | Just one more step and your all set!',
+            from: {
+              email: 'findmeajob@abhinav.xyz',
+              name: 'Abhinav from Find Me a Job',
+            },
+            subject: 'Verify Your Email | Just one more step and your all set!',
             text: `Just click on the link to start getting jobs tailored for you right in your inbox. Don't miss out on oppurtunities ever again - https://immense-basin-85534.herokuapp.com/verify-email?token=${confirmToken}`,
             html,
           };
