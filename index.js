@@ -119,7 +119,7 @@ MongoClient.connect(
               name: 'Abhinav from Find Me a Job',
             },
             subject: 'Verify Your Email | Just one more step and your all set!',
-            text: `Just click on the link to start getting jobs tailored for you right in your inbox. Don't miss out on oppurtunities ever again - https://immense-basin-85534.herokuapp.com/verify-email?token=${confirmToken}`,
+            text: `Just click on the link to start getting jobs tailored for you right in your inbox. Don't miss out on oppurtunities ever again - http://findmeajob.abhinav.xyz/verify-email?token=${confirmToken}`,
             html,
           };
 
