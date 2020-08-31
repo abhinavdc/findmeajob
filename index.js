@@ -143,7 +143,7 @@ MongoClient.connect(
         )
         .then(
           () => {
-            return res.render('views/success-page.pug', {
+            return res.render('success-page.pug', {
               message: 'Email verified successfully',
             });
           },
@@ -161,7 +161,7 @@ MongoClient.connect(
         )
         .then(
           () => {
-            return res.render('views/success-page.pug', {
+            return res.render('success-page.pug', {
               message: 'Unsubscribed successfully',
             });
           },
