@@ -24,9 +24,7 @@
     "react-bulma-components": "^3.4.0",
     "react-dom": "^16.13.1",
     "react-github-button": "^0.1.11",
-    "react-hotjar": "^2.2.1"
-  },
-  "devDependencies": {
+    "react-hotjar": "^2.2.1",
     "file-loader": "^6.1.0"
   }
 }
