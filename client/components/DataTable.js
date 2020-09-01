@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import { ScrapeContext } from './ScrapeContext';
 import { format } from 'date-fns';
 import { motion } from 'framer-motion';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default function DataTable() {
   const { scrapes, fetchMore, loading } = useContext(ScrapeContext);
@@ -39,7 +40,7 @@ export default function DataTable() {
                     </p>
                     <span class="is-size-7">
                       <span class="icon is-small is-right">
-                        <i class="fas fa-map-marker-alt"></i>
+                        <FontAwesomeIcon icon={['fas', 'map-marker-alt']} />
                       </span>
                       {row.location}
                     </span>

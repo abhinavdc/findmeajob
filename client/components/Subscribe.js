@@ -1,4 +1,5 @@
 import { useContext, useState, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ScrapeContext } from './ScrapeContext';
 import { validate } from 'email-validator';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -115,7 +116,7 @@ export default function Subscribe(props) {
                         onChange={handleChange}
                       />
                       <span class="icon is-medium is-right">
-                        <i class="fa fa-envelope-o"></i>
+                        <FontAwesomeIcon icon={['fas', 'envelope-o']} />
                       </span>
                     </div>
                   </div>

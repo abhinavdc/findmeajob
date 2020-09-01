@@ -1,5 +1,6 @@
 import { debounce } from 'lodash';
 import { useContext, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ScrapeContext } from './ScrapeContext';
 import Subscribe from './Subscribe';
 import Logo from './Logo';
@@ -50,7 +51,7 @@ export default function Search() {
                     onChange={search}
                   />
                   <span class="icon is-medium is-right">
-                    <i class="fa fa-search"></i>
+                    <FontAwesomeIcon icon={['fas', 'search']} />
                   </span>
                 </div>
               </div>
@@ -60,7 +61,7 @@ export default function Search() {
                 <p onClick={setAlert} class="is-clickable noselect centered">
                   Set an Alert
                   <span class="icon">
-                    <i class="fa fa-paper-plane"></i>
+                    <FontAwesomeIcon icon={['fas', 'paper-plane']} />
                   </span>
                 </p>
               ) : (

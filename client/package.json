@@ -12,7 +12,9 @@
   "author": "Abhinav",
   "license": "ISC",
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.13.0",
+    "@fortawesome/fontawesome-svg-core": "^1.2.30",
+    "@fortawesome/free-solid-svg-icons": "^5.14.0",
+    "@fortawesome/react-fontawesome": "^0.1.11",
     "date-fns": "^2.11.1",
     "email-validator": "^2.0.4",
     "framer-motion": "^2.3.0",
@@ -24,7 +26,6 @@
     "react-bulma-components": "^3.4.0",
     "react-dom": "^16.13.1",
     "react-github-button": "^0.1.11",
-    "react-hotjar": "^2.2.1",
-    "file-loader": "^6.1.0"
+    "react-hotjar": "^2.2.1"
   }
 }
