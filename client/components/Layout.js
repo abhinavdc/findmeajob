@@ -12,6 +12,7 @@ export default class Layout extends React.Component {
     return (
       <div>
         <Head>
+          <title> Find me a job </title>
           <link rel="shortcut icon" href={favicon} />
         </Head>
         <div>{this.props.children}</div>
