@@ -25,5 +25,8 @@
     "react-dom": "^16.13.1",
     "react-github-button": "^0.1.11",
     "react-hotjar": "^2.2.1"
+  },
+  "devDependencies": {
+    "file-loader": "^6.1.0"
   }
 }
