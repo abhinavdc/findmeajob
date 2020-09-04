@@ -280,14 +280,14 @@ center(style='width: 100%; background-color: #f1f1f1;')
         table.bg_white(role='presentation' border='0' cellpadding='0' cellspacing='0' width='100%')
           each job in jobs
             tr(style='border-bottom: 1px solid rgba(0,0,0,.05);')
-              td(valign='middle' width='80%' style='text-align:left; padding: 0 2.5em;')
+              td(valign='middle' width='70%' style='text-align:left; padding: 0 2.5em;')
                 .product-entry
                   .text
                     h3 #{job.jobTitle}
                     span #{job.companyName}
                     p Posted: #{job.postedDate}
                     
-              td(valign='middle' width='20%' style='text-align:left; padding: 0 2.5em;')
+              td(valign='middle' width='30%' style='text-align:left;')
                 span.price(style='color: #000; font-size: 20px;')
                 a.btn-custom(href=`${job.jobUrl}`) View
           tr
