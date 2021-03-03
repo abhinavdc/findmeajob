@@ -22,7 +22,7 @@
     "lowdb": "^1.0.0",
     "mongodb": "^3.5.7",
     "node-cron": "^2.0.3",
-    "pug": "^3.0.0"
+    "pug": "^3.0.1"
   },
   "devDependencies": {
     "dotenv": "^8.2.0",
